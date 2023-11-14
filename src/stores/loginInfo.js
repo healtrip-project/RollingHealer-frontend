@@ -1,7 +1,7 @@
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useLoginStore = defineStore('loginInfo', () => {
+export const useLoginInfoStore = defineStore('loginInfo', () => {
   const loginInfo = ref({
     accessToken: "",
     userInfo: null,

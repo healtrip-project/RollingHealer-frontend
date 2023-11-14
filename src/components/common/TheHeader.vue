@@ -1,11 +1,11 @@
 <script setup>
-import { useLoginStore } from "@/stores/loginInfo.js";
+import { useLoginInfoStore } from "@/stores/loginInfo.js";
 import TheLogo from "@/components/common/TheLogo.vue"
 import TopNavList from "./TopNavList.vue";
 import NavListItem from "./item/NavListItem.vue";
 import NavButton from "@/components/common/NavButton.vue"
 import { computed } from "vue";
-const loginStore = useLoginStore();
+const loginStore = useLoginInfoStore();
 const user = computed(()=>loginStore.loginInfo);
 console.log(user.value)
 </script>
