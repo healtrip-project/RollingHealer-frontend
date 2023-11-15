@@ -1,13 +1,20 @@
 <script setup>
-import { useLoginInfoStore } from "@/stores/loginInfo.js";
+import { useLoginInfoStore } from "@/stores/loginInfo";
 import TheLogo from "@/components/common/TheLogo.vue"
 import TopNavList from "./TopNavList.vue";
 import NavListItem from "./item/NavListItem.vue";
 import NavButton from "@/components/common/NavButton.vue"
-import { computed } from "vue";
+import { computed,ref } from "vue";
+import ModalContainer from "../layout/ModalContainer.vue";
+import LoginForm from "../login/LoginForm.vue";
 const loginStore = useLoginInfoStore();
-const user = computed(()=>loginStore.loginInfo);
-console.log(user.value)
+const userInfo = computed(()=>loginStore.userInfo);
+const showModal =ref(false);
+const test=()=>{
+    showModal.value=true;
+
+}
+console.log(userInfo.value)
 </script>
 
 <template>
@@ -19,10 +26,13 @@ console.log(user.value)
                 <NavListItem>칼럼</NavListItem>
                 <NavListItem :item-link="{name:'map'}">장소</NavListItem>
                 <NavListItem>길드</NavListItem>
-                <NavListItem v-if="user.userInfo ===null" @click="()=>loginStore.login()"><NavButton>로그인</NavButton></NavListItem>
-                <NavListItem v-else-if="user.userInfo !==null">마이페이지</NavListItem>
+                <NavListItem v-if="userInfo ===null" @click="test"><NavButton>로그인</NavButton></NavListItem>
+                <NavListItem v-else-if="userInfo !==null">마이페이지</NavListItem>
             </TopNavList>
         </nav>
+        <ModalContainer v-if="showModal">
+            <LoginForm></LoginForm>
+        </ModalContainer>
     </header>
 </template>
 
