@@ -12,7 +12,8 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
      const isLoginError = ref(false);
      const userInfo = ref(null);
      const isValidToken = ref(false);
-     const accessToken=ref("");
+     const accessToken = ref("");
+     const token=computed(()=>accessToken.value.substring(accessToken.value.indexOf("Bearer ")))
      const userLogin = async (loginUser) => {
        await userConfirm(
          loginUser,
@@ -22,11 +23,10 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
            if (response.status === httpStatusCode.CREATE) {
              let { data } = response;
              // console.log("data", data);
-             accessToken.value = data["authorization"];
+             accessToken.value = response.headers["authorization"];
              isLogin.value = true;
              isLoginError.value = false;
              isValidToken.value = true;
-             console.log("로그인", isLogin.value);
            } else {
              console.log("로그인 실패했다");
              isLogin.value = false;
@@ -40,14 +40,15 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
        );
      };
 
-     const getUserInfo = (token) => {
-       let decodeToken = jwtDecode(token);
+     const getUserInfo = () => {
+       let decodeToken = jwtDecode(token.value);
        console.log("2. decodeToken", decodeToken);
        findById(
-         decodeToken.userId,
+         decodeToken.user_id,
          (response) => {
            if (response.status === httpStatusCode.OK) {
-             userInfo.value = response.data.userInfo;
+             console.log(response.data)
+             userInfo.value = response.data;
            } else {
              console.log("유저 정보 없음!!!!");
            }
@@ -65,14 +66,11 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
      };
 
      const tokenRegenerate = async () => {
-       console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("accessToken"));
+       console.log("토큰 재발급 ")
        await tokenRegeneration(
-         JSON.stringify(userInfo.value),
          (response) => {
            if (response.status === httpStatusCode.CREATE) {
-             let accessToken = response.data["access-token"];
-             console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
-             sessionStorage.setItem("accessToken", accessToken);
+             accessToken.value=response.headers["authorization"]
              isValidToken.value = true;
            }
          },
@@ -89,11 +87,11 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
                  } else {
                    console.log("리프레시 토큰 제거 실패");
                  }
-                 alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.");
+                //  alert("RefreshToken 기간 만료!!! 다시 로그인해 주세요.");
                  isLogin.value = false;
                  userInfo.value = null;
                  isValidToken.value = false;
-                 router.push({ name: "user-login" });
+                //  router.push({ name: "user-login" });
                },
                (error) => {
                  console.error(error);
@@ -106,9 +104,9 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
        );
      };
 
-     const userLogout = async (userid) => {
+  const userLogout = async () => {
        await logout(
-         userid,
+         userInfo.value.userId,
          (response) => {
            if (response.status === httpStatusCode.OK) {
              isLogin.value = false;
@@ -129,6 +127,7 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
        isLoginError,
        userInfo,
        isValidToken,
+       accessToken,
        userLogin,
        getUserInfo,
        tokenRegenerate,

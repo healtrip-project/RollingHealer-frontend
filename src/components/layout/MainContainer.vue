@@ -8,7 +8,6 @@ import ModalContainer from "./ModalContainer.vue";
         <slot name="header"></slot>
         <div class="main-content">
             <slot name="main"></slot>
-            <ModalContainer></ModalContainer>
         </div>
         <slot name="footer"></slot>
     </div>
