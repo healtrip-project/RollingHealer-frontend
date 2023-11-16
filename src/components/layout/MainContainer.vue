@@ -1,4 +1,6 @@
 <script setup>
+import ModalContainer from "./ModalContainer.vue";
+
 </script>
 
 <template>
@@ -6,6 +8,7 @@
         <slot name="header"></slot>
         <div class="main-content">
             <slot name="main"></slot>
+            <ModalContainer></ModalContainer>
         </div>
         <slot name="footer"></slot>
     </div>
