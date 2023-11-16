@@ -1,4 +1,5 @@
 import { localAxios } from "@/utils/http-commons"
+import { useLoginInfoStore } from "@/stores/loginInfo";
 
 const local = localAxios();
 
@@ -8,16 +9,19 @@ async function userConfirm(param, success, fail) {
 }
 
 async function findById(userid, success, fail) {
-  local.defaults.headers["Authorization"] = loginInfoStore.accessToken;
-  await local.get(`/user/info/${userid}`).then(success).catch(fail);
+  const store = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = store.accessToken;
+  await local.get(`/user/${userid}`).then(success).catch(fail);
 }
 
-async function tokenRegeneration(user, success, fail) {
-  await local.post(`/auth/refresh`, user).then(success).catch(fail);
+async function tokenRegeneration(success, fail) {
+  await local.post(`/auth/refresh`).then(success).catch(fail);
 }
 
 async function logout(userid, success, fail) {
-  await local.get(`/user/logout/${userid}`).then(success).catch(fail);
+  const store = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = store.accessToken;
+  await local.get(`/user/logout`).then(success).catch(fail);
 }
 
 export { userConfirm, findById, tokenRegeneration, logout };
