@@ -37,7 +37,8 @@
   color: black;
   padding: 20px;
   border: 1px solid #888;
-  width: 300px;
+  width: 500px;
+  height:400px;
 }
 
 .close {

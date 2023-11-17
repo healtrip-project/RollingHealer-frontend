@@ -1,4 +1,5 @@
 <script setup>
+import TheTiptapEditor from "../common/editor/TheTiptapEditor.vue";
 import ModalContainer from "./ModalContainer.vue";
 
 </script>
@@ -8,12 +9,19 @@ import ModalContainer from "./ModalContainer.vue";
         <slot name="header"></slot>
         <div class="main-content">
             <slot name="main"></slot>
+            <ModalContainer class="editor-test-box">
+                <TheTiptapEditor isEdit></TheTiptapEditor>
+            </ModalContainer>
         </div>
         <slot name="footer"></slot>
     </div>
 </template>
 
 <style scoped>
+.editor-test-box{
+    width: 400px;
+    height:300px;
+}
 .container{
     width: 100%;
     min-height:100vh;
