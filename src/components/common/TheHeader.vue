@@ -7,6 +7,19 @@ import NavButton from "@/components/common/NavButton.vue"
 import { computed,ref } from "vue";
 import ModalContainer from "../layout/ModalContainer.vue";
 import LoginForm from "../login/LoginForm.vue";
+import { useRouter } from "vue-router";
+
+
+
+const router = useRouter();
+const movePost = () => {
+    router.push({name : 'Post'})
+}
+
+const moveGuild = () => {
+    router.push({name : 'Guild'})
+}
+
 
 </script>
 
@@ -16,9 +29,9 @@ import LoginForm from "../login/LoginForm.vue";
             <TheLogo type="default"/>
             <TopNavList>
                 <NavListItem>힐링플랜</NavListItem>
-                <NavListItem>칼럼</NavListItem>
+                <NavListItem @click="movePost">칼럼</NavListItem>
                 <NavListItem :item-link="{name:'map'}">장소</NavListItem>
-                <NavListItem>길드</NavListItem>
+                <NavListItem @click="moveGuild">길드</NavListItem>
             </TopNavList>
             <LoginForm></LoginForm>
         </nav>
