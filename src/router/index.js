@@ -3,6 +3,8 @@ import HomeView from '../views/MainView.vue'
 import MainPageVue from '@/components/main/MainPage.vue'
 import PostList from '@/components/post/PostList.vue'
 import GuildList from '@/components/guild/GuildList.vue'
+import PostWrite from '@/components/post/PostWrite.vue'
+import PostDetail from '@/components/post/PostDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +38,16 @@ const router = createRouter({
           path: '/post/list',
           name: 'PostList',
           component: PostList,
+        },
+        {
+          path: '/post/write',
+          name: 'PostWrite',
+          component: PostWrite,
+        },
+        {
+          path: '/post/detail/:id',
+          name: 'PostDetail',
+          component: PostDetail,
         },
       ]
     },
