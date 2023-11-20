@@ -3,11 +3,6 @@ import { useLoginInfoStore } from "@/stores/loginInfo";
 
 const local = localAxios();
 
-async function userConfirm(param, success, fail) {
-  console.log("param", param);
-  await local.post(`/auth/login`, param).then(success).catch(fail);
-}
-
 async function getGuild(success, fail) {
     const ulis = useLoginInfoStore();
   local.defaults.headers["Authorization"] = ulis.accessToken;
@@ -19,12 +14,15 @@ async function getGuild(success, fail) {
 //   }
 
 
-async function writePost(post, success, fail) {
-  await local.post(`/post`, post).then(success).catch(fail);
+async function makeGuild(guild, success, fail) {
+  const ulis = useLoginInfoStore();
+local.defaults.headers["Authorization"] = ulis.accessToken;
+console.dir(guild);
+await local.post(`/guild`, guild).then(success).catch(fail);
 }
 
-async function getPostDetails(postId, success, fail) {
-  await local.get(`/post/${postId}`).then(success).catch(fail);
+async function getGuildDetails(guildAlias, success, fail) {
+  await local.get(`/guild/${guildAlias}`).then(success).catch(fail);
 }
 
 
@@ -40,4 +38,4 @@ async function getPostDetails(postId, success, fail) {
 //   await local.get(`/user/logout/${userid}`).then(success).catch(fail);
 // }
 
-export {getGuild  };
+export {getGuild , makeGuild, getGuildDetails };

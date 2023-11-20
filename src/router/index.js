@@ -5,6 +5,8 @@ import PostList from '@/components/post/PostList.vue'
 import GuildList from '@/components/guild/GuildList.vue'
 import PostWrite from '@/components/post/PostWrite.vue'
 import PostDetail from '@/components/post/PostDetail.vue'
+import GuildMake from '@/components/guild/GuildMake.vue'
+import GuildDetail from '@/components/guild/GuildDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,6 +63,16 @@ const router = createRouter({
           path: '/guild/list',
           name: 'GuildList',
           component: GuildList,
+        },
+        {
+          path: '/guild/make',
+          name: 'GuildMake',
+          component: GuildMake,
+        },
+        {
+          path: '/guild/detail/:alias',
+          name: 'GuildDetail',
+          component: GuildDetail,
         },
       ]
     },
