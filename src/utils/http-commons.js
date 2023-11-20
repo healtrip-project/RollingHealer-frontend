@@ -1,7 +1,7 @@
 import axios from "axios";
 import {httpStatusCode} from "@/utils/http-status"
 const { VITE_API_BASE_URL } = import.meta.env;
-
+import { useLoginInfoStore } from "@/stores/loginInfo";
 // local vue api axios instance
 function localAxios() {
   const instance = axios.create({
@@ -12,7 +12,6 @@ function localAxios() {
     // },
   });
   // Request 발생 시 적용할 내용.
-  instance.defaults.headers.common["Authorization"] = "";
   instance.defaults.headers.post["Content-Type"] = "application/json";
   instance.defaults.headers.put["Content-Type"] = "application/json";
 
@@ -54,11 +53,14 @@ function localAxios() {
           // 에러가 발생했던 컴포넌트의 axios로 이동하고자하는 경우
           // 반드시 return을 붙여주어야한다.
           return await instance.post("/auth/refresh").then((response) => {
-            const newAccessToken = response.data.Authorization;
+            const newAccessToken = response.headers["authorization"];
 
             instance.defaults.headers.common["Authorization"] = newAccessToken;
-            originalRequest.headers.Authorization = newAccessToken;
-
+            originalRequest.headers["Authorization"] = newAccessToken;
+            
+            const store=useLoginInfoStore();
+            store.setAccessToken(newAccessToken);
+            store.setLoginStatus(true);
             isTokenRefreshing = false;
 
             // 에러가 발생했던 원래의 요청을 다시 진행.

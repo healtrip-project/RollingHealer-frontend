@@ -23,6 +23,8 @@
   --rhp-c-background-1: #262626;
   --rhp-c-text-1:#ffffff;
   --rhp-c-background-1-opacity-5:rgba(38, 38, 38,0.5);
+  --rhp-c-background-2:rgb(83, 173, 202);
+  --rhp-c-background-3:rgb(194, 86, 86);
 
 }
 
@@ -31,6 +33,9 @@
   --color-background: var( --rhp-c-background-1);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
+  --color-background-lightsky:var(--rhp-c-background-2);
+  --color-background-lightred:var(--rhp-c-background-3);
+  
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);

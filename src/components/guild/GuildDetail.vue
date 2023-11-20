@@ -1,8 +1,8 @@
 <script setup>
 import { getGuildDetails } from '@/api/v1/guild';
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import { useRoute } from 'vue-router';
-
+import { useLoginInfoStore } from "@/stores/loginInfo";
 const route = useRoute();
 
 const actions = ref([
@@ -16,7 +16,9 @@ const topContentItems = ref([
 const logs = ref([
   // Populate with log data
 ]);
-
+const LoginInfoStore=useLoginInfoStore()
+const userInfo=computed(()=>LoginInfoStore.userInfo)
+console.dir(userInfo)
 const guildDetails = ref({});
 
 const getGuild = () => {
@@ -39,112 +41,91 @@ getGuild();
 
 <template>
     <div class="main-container">
-      <aside class="left-sidebar">
-        <div class="profile-section">
-          <!--  <img src="path-to-profile-image.jpg" alt="Profile" class="profile-picture"> -->
-          <h3 class="username">유저이름</h3>
-          <p class="user-description">간단 소개</p>
-        </div>
-        <ul class="user-actions">
-          <!-- Dynamically generate list items -->
-          <li v-for="action in actions" :key="action.id" class="action-item">
-            <img :src="action.icon" alt="" class="action-icon">
-            <span>{{ action.label }}</span>
-          </li>
-        </ul>
-      </aside>
-      <section class="content-area">
-        <div class="top-content">
-          <!-- Dynamically generate content cards -->
-          <div v-for="item in topContentItems" :key="item.id" class="content-card">
-            <img :src="item.image" alt="" class="card-image">
-            <div class="card-description">
-              <h4>{{ item.title }}</h4>
-              <p>{{ item.description }}</p>
-            </div>
+      <div class="left-side">
+        <v-card 
+        
+        variant="text"
+        >
+        <template v-slot:title>
+            <div>
+              <v-img
+              src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D"
+              height="200px"
+              width="200px"
+              class="guild-picture"
+              >
+              
+            </v-img>
           </div>
-        </div>
-        <div class="bottom-content">
-          <ul class="logs">
-            <!-- Dynamically generate logs -->
-            <li v-for="log in logs" :key="log.id" class="log-item">
-              <span>{{ log.action }}</span>
-              <span>{{ log.date }}</span>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <v-card-item>{{  guildDetails.guildName }}</v-card-item>
+        </template>
+
+        <template v-slot:subtitle>
+          <v-card-subtitle>
+            {{ guildDetails.goal }}
+          </v-card-subtitle>
+          <v-card-subtitle>
+            소속 길드원 : {{ guildDetails.userCount }}명
+          </v-card-subtitle>
+          <v-card-item v-if="userInfo.userId==guildDetails.guildManager" @click.stop="">
+             ( 정보수정 )
+          </v-card-item>
+        </template>
+
+        <template v-slot:text>
+          <v-card-item class="guild-description">
+            {{ guildDetails.description }}
+          </v-card-item>
+        </template>
+      </v-card>
+      <v-list lines="two" class="guild-user-list">
+        <v-list-subheader class="guild-user-list-header">길드원 목록</v-list-subheader>
+        <v-list-item
+          v-for="n in 3"
+          :key="n"
+          :title="'Item ' + n"
+          subtitle="Lorem ipsum dolor sit amet consectetur adipisicing elit"
+          prepend-avatar="https://randomuser.me/api/portraits/women/8.jpg"
+        ></v-list-item>
+      </v-list>
+      </div>
+    </div>
+    <div class="main-content">
+  
     </div>
   </template>
   
   
   <style scoped>
   .main-container {
+    display: block;
+    height: 100vh;
+  }
+  
+  .left-side {
     display: flex;
+    max-width: 200px;
+    flex-direction: column;
+    flex: 1,1,0; /* Adjust width as necessary */
+    background-color: var(--color-background-lightred); /* Adjust color as necessary */
   }
   
-  .left-sidebar {
-    width: 20%; /* Adjust width as necessary */
-    background-color: #C0392B; /* Adjust color as necessary */
+  .guild-user-list {
+    background-color: var(--color-background-lightred); /* Adjust color as necessary */
+    color: var(--rhp-c-text-1);
   }
-  
-  .profile-section {
-    /* Style the profile section */
+  .guild-user-list-header{
+    color: var(--rhp-c-text-1);
   }
-  
-  .profile-picture {
+  .guild-picture {
     border-radius: 50%; /* Make the image round */
   }
-  
-  .username {
-    /* Style the username */
+  .main-content{
+    display: block;
+    background-color: var(--color-background-lightsky);
+    height:100vh;
   }
-  
-  .user-description {
-    /* Style the user description */
-  }
-  
-  .user-actions {
-    list-style: none; /* Remove list bullet points */
-    padding: 0; /* Remove padding */
-  }
-  
-  .action-item {
-    display: flex;
-    align-items: center; /* Align icon and label */
-  }
-  
-  .content-area {
-    width: 80%; /* Adjust width as necessary */
-    background-color: #34495E; /* Adjust color as necessary */
-  }
-  
-  .top-content {
-    /* Style the top content area */
-  }
-  
-  .content-card {
-    /* Style the content cards */
-  }
-  
-  .card-image {
-    /* Style the card images */
-  }
-  
-  .card-description {
-    /* Style the card description */
-  }
-  
-  .bottom-content {
-    /* Style the bottom content area */
-  }
-  
-  .logs {
-    list-style: none; /* Remove list bullet points */
-    padding: 0; /* Remove padding */
-  }
-  
-  .log-item {
-    /* Style the log items */
+  .guild-description{
+    max-height: 10rem;
   }
   </style>

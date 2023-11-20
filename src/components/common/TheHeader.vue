@@ -27,7 +27,7 @@ const moveGuild = () => {
     <header class="header">
         <nav class="header-nav">
             <TheLogo type="default"/>
-            <TopNavList>
+            <TopNavList class="ms-10">
                 <NavListItem>힐링플랜</NavListItem>
                 <NavListItem @click="movePost">칼럼</NavListItem>
                 <NavListItem :item-link="{name:'map'}">장소</NavListItem>

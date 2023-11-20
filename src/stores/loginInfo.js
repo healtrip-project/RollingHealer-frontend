@@ -121,6 +121,13 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
          }
        );
      };
+     const setLoginStatus=(status)=>{
+        isLogin.value=status;
+     }
+     const setAccessToken=(newAccessToken)=>{
+        accessToken.value=newAccessToken;
+     }
+     
 
      return {
        isLogin,
@@ -132,6 +139,8 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
        getUserInfo,
        tokenRegenerate,
        userLogout,
+       setLoginStatus,
+       setAccessToken,
      };
 },
   {
