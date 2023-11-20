@@ -1,8 +1,9 @@
 <script setup>
-import { useEditor, EditorContent,BubbleMenu } from '@tiptap/vue-3'
+import { useEditor, EditorContent,BubbleMenu,FloatingMenu } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import { ref,onBeforeUnmount,watch } from "vue"
 import { Node } from '@tiptap/core'
+import EditorPlanNode from './node/EditorPlanNode';
 const props=defineProps({
   isEdit:{
     type:Boolean,
@@ -11,7 +12,9 @@ const props=defineProps({
 })
 
 const editor = useEditor({
-  content: '',
+  content: `
+    <editor-plan></editor-plan>
+  `,
   editable:props.isEdit,
    editorProps: {
     attributes: {
@@ -20,11 +23,21 @@ const editor = useEditor({
   },
   extensions: [
     StarterKit,
+    EditorPlanNode,
   ],
 })
 const editorMenuList=['bold','italic','underline'];
 const editorMenuListStatus=ref([false,false,false]);
 
+const addPlanNode = () => {
+  const exampleData = {
+    title: "야경",
+    addr1: "대충주소",
+    addr2: "대충주소2",
+    latitude:""
+  }
+  editor.value.chain().focus().insertPlanNode().run()
+}
 const updateBubbleMenu=()=>{
   for (let i=0; i<editorMenuList.length; i++) {
     editorMenuListStatus.value[i]=editor.value.isActive(editorMenuList[i]);
@@ -46,7 +59,6 @@ onBeforeUnmount(()=>{
 </script>
 
 <template>
-   
   <v-container class="editor-box" >
     <bubble-menu
     :editor="editor"
@@ -75,7 +87,7 @@ onBeforeUnmount(()=>{
         <v-icon>mdi-format-italic</v-icon>
       </v-btn>
       
-      <v-btn :active="editorMenuListStatus[2]" @click="">
+      <v-btn :active="editorMenuListStatus[2]" @click.stop="">
         <v-icon>mdi-format-underline</v-icon>
       </v-btn>
       
@@ -84,6 +96,29 @@ onBeforeUnmount(()=>{
       </v-btn>
     </v-btn-group>
   </bubble-menu>
+  <floating-menu
+  :editor="editor"
+  :tippy-options="{ duration: 250, 
+    interactiveDebounce: 75,
+    delay:100,
+    }"
+  v-if="editor"
+  >
+  <v-btn-group
+    background-color="primary"
+    variant="outlined"
+    rounded="xl"
+    multiple
+    :elevation="2"
+    divided
+      class="h-auto"
+      
+      >
+    <v-btn :active="editorMenuListStatus[2]" @click="addPlanNode">
+        <v-icon>mdi-format-underline</v-icon>
+      </v-btn>
+  </v-btn-group>
+  </floating-menu>
   <editor-content class="tiptap-container" :editor="editor" />
 </v-container>
 </template>
