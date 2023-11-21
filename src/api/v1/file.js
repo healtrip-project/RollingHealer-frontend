@@ -3,7 +3,7 @@ import { useLoginInfoStore } from "@/stores/loginInfo";
 
 const local = localAxios();
 
-async function uploadImage(data, success, fail) {
+async function uploadImage(data, success, fail,progress) {
   const store = useLoginInfoStore();
   local.defaults.headers["Authorization"] = store.accessToken;
   const formData=new FormData();
@@ -16,6 +16,14 @@ async function uploadImage(data, success, fail) {
   }
   await local
     .post(`/file/upload`, formData, {
+      onUploadProgress: (progressEvent) => {
+        let percentage = (progressEvent.loaded * 100) / progressEvent.total;
+        //progressEvent.loaded는 현재까지 로드 된 수치를 나타내고
+        //progressEvent.total은 전체 수치를 나타낸다.
+        let percentCompleted = Math.round(percentage);
+        progress( percentCompleted); //onUplodeProgress는 갱신될 때마다 수행한다.
+
+      },
       headers: {
         "Content-Type": "multipart/form-data",
       },

@@ -16,7 +16,7 @@ const props = defineProps({
 
 <template>
   <node-view-wrapper class="plan-container ">
-    <span>내용</span>
+    
     <node-view-content class="content"  />
   </node-view-wrapper>
 </template>
