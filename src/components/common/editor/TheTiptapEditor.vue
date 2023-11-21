@@ -4,6 +4,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { ref,onBeforeUnmount,watch } from "vue"
 import { Node } from '@tiptap/core'
 import EditorPlanNode from './node/EditorPlanNode';
+import ImageForm from "../image/ImageForm.vue";
 const props=defineProps({
   isEdit:{
     type:Boolean,
@@ -120,6 +121,7 @@ onBeforeUnmount(()=>{
   </v-btn-group>
   </floating-menu>
   <editor-content class="tiptap-container" :editor="editor" />
+  <image-form></image-form>
 </v-container>
 </template>
 <style >
