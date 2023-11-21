@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch  } from 'vue';
 import { useLoginInfoStore } from "@/stores/loginInfo";
-import { makeGuild } from "@/api/v1/guild"
+import { makeGuild, checkAliasAvailability } from "@/api/v1/guild"
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 
@@ -9,7 +9,8 @@ const router = useRouter();
 const userStore = useLoginInfoStore();
 console.dir(userStore.userInfo);
 
-const guildAlias = ref("" + Math.random().toString(5) )
+const guildAlias = ref("")
+// const guildAlias = ref("" + Math.random().toString(5) )
 const guildName = ref('')
 const description = ref('')
 const goal= ref('')
@@ -17,19 +18,41 @@ const createdBy = ref('')
 const guildManager = ref('')
 const profileImg = ref("");
 
+const isAvailableAlias = ref(false);
 
 onMounted(() => {
     if (userStore.userInfo.userId) {
         createdBy.value = userStore.userInfo.userId;
         guildManager.value = userStore.userInfo.userId;
-        console.log(createdBy.value);
-        console.log(guildManager.value);
-        // profileImg.value = userStore.userInfo.userThumbnailFileUrl;
     } 
 });
 
+// 입력값이 영어와 숫자만 포함되었는지 확인
+const validateInput = (value) => /^[A-Za-z0-9]*$/.test(value);
+
+// guildAlias 감시 + 중복체크 
+watch(guildAlias , () => {
+  checkAliasAvailability(
+    guildAlias.value,
+    ({ data }) => {
+            isAvailableAlias.value = data;
+        },
+        (error) => {
+            console.log(error);
+        }
+  )
+})
+
 // 글 작성 제출 핸들러
 function submitGuild() {
+    if (!validateInput(guildAlias.value) ) {
+      alert("영어와 숫자만 입력 가능합니다.");
+      return;
+    }
+    if (!guildName.value || !guildAlias.value || !goal.value || !description.value) {
+    alert("길드이름 또는 설명, 목표, Alias가 비어있습니다.");
+    return;
+  }
     makeGuild(
         {
             guildAlias: guildAlias.value,
@@ -64,7 +87,9 @@ const moveGuildList = () => {
                 <div class="vue-name">길드 생성하기</div>
                 <div>길드 이름</div>
                 <input type="text" class="title-input" placeholder="여기에 길드 네임을 입력하세요" v-model="guildName" />
-            </div>
+                <div>이미지 입력</div>
+
+              </div>
 
             <div class="guild-detail-container">
                 
@@ -82,12 +107,26 @@ const moveGuildList = () => {
             </div>
 
             <div class="editor-container">
+              <v-card class="mx-auto px-6 py-8">
                 <!-- Text input for content -->
+                <div>길드 Alias</div>
+                <v-text-field
+                  label="Alias을 입력하세요"
+                  variant="underlined"
+                  hide-details="auto"
+                  v-model="guildAlias"
+                  color="primary"
+                  :error-messages="!isAvailableAlias ? '불가능' : ''"
+                  
+                ></v-text-field>
+                
+  
                 <div>길드 설명</div>
                 <input type="text" class="content-input" placeholder="여기에 길드 설명을 입력하세요" v-model="description" />
                 <div>길드 목표</div>
                 <input type="text" class="content-input" placeholder="여기에 길드 목표를 입력하세요" v-model="goal" />
 
+              </v-card>
                 
             </div>
             <!-- Submit button -->
@@ -99,6 +138,8 @@ const moveGuildList = () => {
 </template>
 
 <style scoped>
+
+
 .user-info-bar {
   /* 유저 정보 바 스타일 */
   background-color: #0E0E0E; /* 어두운 그레이 배경색 */
@@ -139,12 +180,13 @@ const moveGuildList = () => {
 
 .editor-container {
   /* 에디터 컨테이너 스타일 */
+
 }
 
 
 .guild-title-container {
     max-width: 600px;
-    height: 600px;
+    height: 500px;
     margin: auto;
     background-color: #0E0E0E;
     color: white;

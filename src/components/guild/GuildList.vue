@@ -52,7 +52,7 @@ getGuildList();
     <!-- Guilds container -->
     <div class="guilds-container">
       <div v-for="(guild, index) in guildlist" :key="guild.alias" class="guild-item">
-        <RouterLink :to="{ name: 'GuildDetail', params: { alias: guild.guildAlias } }"> 
+        <RouterLink :to="{ name: 'GuildDetail', params: { alias: guild.guildAlias , id:guild.guildId} }"> 
        <!-- Extract the first image from guild content and use it as the background -->
         <div class="guild-image" :style="{ backgroundImage: 'url(' + defaultImageUrls[index % defaultImageUrls.length] + ')' }">
          <!-- <div class="guild-image" :style="{ backgroundImage: 'url(' + extractFirstImage(guild.content, index) + ')' }"> -->

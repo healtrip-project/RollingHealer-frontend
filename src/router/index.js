@@ -7,6 +7,8 @@ import PostWrite from '@/components/post/PostWrite.vue'
 import PostDetail from '@/components/post/PostDetail.vue'
 import GuildMake from '@/components/guild/GuildMake.vue'
 import GuildDetail from '@/components/guild/GuildDetail.vue'
+import GuildPostWrite from '@/components/guild/guildPostWrite.vue'
+import GuildPostDetail from '@/components/guild/GuildPostDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,9 +72,19 @@ const router = createRouter({
           component: GuildMake,
         },
         {
-          path: '/guild/detail/:alias',
+          path: '/guild/detail/:alias/:id',
           name: 'GuildDetail',
           component: GuildDetail,
+        },
+        {
+          path: '/guild/guildpost/:alias/:id',
+          name: 'GuildPostWrite',
+          component: GuildPostWrite,
+        },
+        {
+          path: '/guild/guildpost/:alias/:id/:postId',
+          name: 'GuildPostDetail',
+          component: GuildPostDetail,
         },
       ]
     },
