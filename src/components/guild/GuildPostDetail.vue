@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { getGuildPostDetails,guildPostDelete, } from "@/api/v1/guild";
+import { getGuildPostDetails, guildPostDelete, } from "@/api/v1/guild";
 import { useRoute , useRouter} from "vue-router";
 
 const route = useRoute();

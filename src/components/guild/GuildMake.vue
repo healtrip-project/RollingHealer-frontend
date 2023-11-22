@@ -35,11 +35,11 @@ watch(guildAlias , () => {
   checkAliasAvailability(
     guildAlias.value,
     ({ data }) => {
-            isAvailableAlias.value = data;
-        },
-        (error) => {
-            console.log(error);
-        }
+        isAvailableAlias.value = data;
+    },
+    (error) => {
+        console.log(error);
+    }
   )
 })
 
@@ -77,6 +77,8 @@ function submitGuild() {
 const moveGuildList = () => {
     router.push({name: "GuildList"})
 }
+
+
 
 </script>
 

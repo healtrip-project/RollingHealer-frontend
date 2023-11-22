@@ -3,19 +3,12 @@ import { useLoginInfoStore } from "@/stores/loginInfo";
 
 const local = localAxios();
 
-
-
-
-
-
 /// 길드 Alias 체크 부분
 async function checkAliasAvailability (guildAlias, success, fail) {
   const ulis = useLoginInfoStore();
   local.defaults.headers["Authorization"] = ulis.accessToken;
   await local.get(`/guild/checkalias/${guildAlias}`).then(success).catch(fail);
 }
-
-
 
 
 // 길드 부분
@@ -60,4 +53,28 @@ async function getGuildPostDetails(guildAlias, postId, success, fail) {
   await local.get(`/guild/${guildAlias}/guildpost/${postId}`).then(success).catch(fail);
 }
 
-export {checkAliasAvailability, getGuild , makeGuild, getGuildDetails, getGuildPosts, guildPostWrite, guildPostDelete, getGuildPostDetails };
+//Guild join
+async function joinGuild (guildId, userId, success, fail) {
+  const ulis = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = ulis.accessToken;
+  await local.put(`/guild/${guildId}/join/${userId}`).then(success).catch(fail);
+}
+
+async function getGuildMemberList (guildId, success, fail) {
+  const ulis = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = ulis.accessToken;
+  await local.get(`/guild/${guildId}/members`).then(success).catch(fail);
+}
+
+export {
+  checkAliasAvailability, 
+  getGuild , 
+  makeGuild, 
+  getGuildDetails, 
+  getGuildPosts, 
+  guildPostWrite, 
+  guildPostDelete, 
+  getGuildPostDetails,
+  joinGuild, 
+  getGuildMemberList,
+};
