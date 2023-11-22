@@ -1,10 +1,11 @@
 <script setup>
+import { Editor } from "@tiptap/vue-3";
 import { computed,ref } from "vue";
 import { useRouter } from "vue-router";
-
+const emits=defineEmits(['clickItem'])
 const props=defineProps({
     itemList:{
-      type:Array,
+      type:[Array, Object],
       
     }
   }) 
@@ -18,13 +19,27 @@ const props=defineProps({
     color:'var(--rhp-c-background-3)',
 
   })
-  console.log(props.itemList)
-  const handleClick=(e,item)=>{
-    console.log(item)
-    if(item?.postId){
-      router.push({ name: 'PostDetail', params: { id: item.postId } })
+const testImageParser = (json) => {
+    for (const attr in json) {
+      if (json[attr] !== null && json[attr] !== undefined&&typeof json[attr]=='object')
+        if (attr === 'attrs') {
+          
+          return json[attr].src
+        } else {
+          return testImageParser(json[attr])
+        }
+        
     }
   }
+const firstImageParingTest = (json) => {
+  if (!json) { return; }
+  for (const attr in json) {
+    if (json[attr] !== null && json[attr] !== undefined&&typeof json[attr]=='object') {
+      
+      return testImageParser(json[attr])
+    }
+  }
+}
 </script>
 
 <template>
@@ -43,30 +58,30 @@ const props=defineProps({
     >
 
           <v-slide-group-item
-           v-slot="{ isSelected, selectedClass, toggle,}"
+           v-slot="{ isSelected, toggle,}"
            v-for="(item,index) in itemList"
         :key="index"
-        @click="()=>handleClick(item)"
-           >
-            <v-card
-              :class="['d-flex justify-center','text-center','ma-4','heart-box','rounded-lg','grey-darken-4', selectedClass]"
-              :style="{backgroundColor:'black'}"
-              width="130"
-              height="130"
-              @click="toggle"
-              hover 
-              :image="item.firstimage || item.firstimage2 "
-            >
-            <div class="mt-10"><p class="title-text">{{ item?.title }}</p></div>
+        >
+        <v-card
+        :class="['d-flex justify-center','text-center','ma-4','heart-box','rounded-lg','grey-darken-4']"
+        :style="{backgroundColor:'black'}"
+        width="130"
+        height="130"
+        @click="toggle"
+        :to="(item?.postId&&{ name: 'PostDetail', params: { id: item.postId } })"
+        hover 
+        :image="item.firstimage || item.firstimage2 ||firstImageParingTest(item?.content&&JSON.parse(item?.content))"
+        >
+            <div class=" d-flex flex-column mt-11 w-100"><p class="title-text">{{ item?.title }}</p><p class="low-text">{{ item?.createBy }}</p></div>
+            
               <div
                 class="text-h3
                  text-end heart-button
                  "
               >
-                <v-btn :style="heartStyle" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+                <v-btn v-show="!(item?.postId)" :style="heartStyle" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
               
               </div>
-              <slot name="createBy"></slot>
             </v-card>
         </v-slide-group-item>
   </v-slide-group> 
@@ -92,10 +107,24 @@ const props=defineProps({
 }
 .title-text{
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 1rem;
   word-break: keep-all;
   color:whitesmoke;
   justify-content: center;
+  margin-bottom: 1rem;
+  text-shadow: #000000 0.1rem 0.3rem 5px;
+
+}
+.low-text{
+  font-weight: bold;
+  font-size: 0.9rem;
+  word-break: keep-all;
+  color:whitesmoke;
+  justify-content: flex-end;
+  align-self: flex-end;
+
+  padding-bottom: 1rem;
+  padding-right: 1rem;
 }
 
 </style>

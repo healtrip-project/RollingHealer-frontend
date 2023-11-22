@@ -28,11 +28,6 @@ const router = createRouter({
       ],
     },
     {
-      path: "/map",
-      name: "map",
-      component: () => import("../views/MapView.vue"),
-    },
-    {
       path: "/post",
       name: "Post",
       component: () => import("../views/PostView.vue"),
@@ -98,6 +93,34 @@ const router = createRouter({
           path: "/place/list",
           name: "PlaceList",
           component: PlaceList,
+        },
+      ],
+    },
+    {
+      path: "/plan",
+      name: "Plan",
+      component: () => import("../views/PlanView.vue"),
+      redirect: { name: "PlanList" },
+      children: [
+        {
+          path: "/plan/list",
+          name: "PlanList",
+          component: ()=>import("../components/plan/PlanList.vue"),
+        },
+        {
+          path: "/plan/write",
+          name: "PlanWrite",
+          component: ()=>import("../components/plan/PlanWrite.vue"),
+        },
+        {
+          path: "/plan/detail/:id",
+          name: "PlanDetail",
+          component: ()=>import("../components/plan/PlanDetail.vue")
+        },
+        {
+          path: "/plan/map",
+          name: "MapMain",
+          component: ()=>import("../components/map/NMAP.vue")
         },
       ],
     },

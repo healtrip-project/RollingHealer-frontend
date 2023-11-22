@@ -1,11 +1,13 @@
 <script setup>
 import { useEditor, EditorContent,BubbleMenu,FloatingMenu } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import { ref,onBeforeUnmount,watch } from "vue"
+import { ref,onBeforeUnmount,watch,nextTick } from "vue"
 import {Image } from '@tiptap/extension-image'
 import EditorPlanNode from './node/EditorPlanNode';
 import ImageForm from "../image/ImageForm.vue";
+import { downloadImage } from '@/api/v1/file';
 import { onMounted } from 'vue';
+import { compileScript } from '@vue/compiler-sfc';
 const props=defineProps({
   isEdit:{
     type:Boolean,
@@ -95,7 +97,7 @@ const updateBubbleMenu = () => {
 
   // const toggleMultipleEditorMenu =ref([]);
   onBeforeUnmount(()=>{
-    editor.value.destroy();
+    editor.value?.destroy();
   })
   const handleToggleBold = () => {
     editor.value.chain().focus().toggleBold().run()
@@ -125,6 +127,27 @@ const clickImage = () => {
   console.log("테스트",editor.value)
   console.log(editor.isActive("img"))
   if (editor.value.isActive('img', { class: 'view-image' })) { console.log("나옴")}
+}
+const handleImageDownload = () => {
+  downloadImage(detailImage.value.replace('image', 'download'), (response) => {
+    const url = URL.createObjectURL(new Blob([response.data],{type:response.headers['content-type'], endings:'native'}))
+
+    const link = document.createElement('a');
+    link.href = url;
+    const fileName = response.headers['content-disposition']
+      .split('filename=')[1]
+
+    link.setAttribute( 'download',fileName) //= `${fileName.replace('"', '').replace('"', '')}`
+    link.click();
+    nextTick(()=>{
+      URL.revokeObjectURL(url)
+      
+    })
+  },
+  (error) => {
+      console.log(error);
+  })
+
 }
 </script>
 
@@ -189,14 +212,13 @@ const clickImage = () => {
   <image-form v-if="isEdit"  v-model:showUpload="showUploadModal" @success-upload="handleImageUpload"></image-form>
   <v-dialog
   v-model="isShowDetailImage"
-
-
+  scrollable
+  fullscreen
   >
   <v-img
     class="mx-auto"
     width="auto"
-    scrollable
-    height="100%"
+    height="85%"
     @click="()=>isShowDetailImage=false"
     :src="detailImage"
   >
@@ -209,6 +231,7 @@ const clickImage = () => {
       </div>
     </template>
   </v-img>
+  <button @click.prevent="handleImageDownload"><span class="text-h4 ">원본이미지 다운</span></button>
   </v-dialog>
 </v-container>
 </template>
