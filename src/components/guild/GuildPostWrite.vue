@@ -4,6 +4,7 @@ import { useLoginInfoStore } from "@/stores/loginInfo";
 import { guildPostWrite } from "@/api/v1/guild";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
+import TheTiptapEditor from "../common/editor/TheTiptapEditor.vue";
 const route = useRoute();
 const router = useRouter();
 
@@ -75,15 +76,11 @@ const moveGuildDetail = () => {
             <!-- Text input for content -->
           </v-text-field>
           <br/>
-          <v-text-field 
-            class="content-input"
-            label="내용을 작성하세요" 
-            :rules="[rules.required]"
-            variant="outlined"
-            v-model="content"
-          >
-          </v-text-field>
-        </div>
+          <div class="post-writer-container">
+            <the-tiptap-editor class="content-input" :is-edit="true" v-model="content"></the-tiptap-editor>
+
+          </div>
+          </div>
         <input type="number" class="useFile" v-model="isUseFile" hidden />
       </div>
 
@@ -156,7 +153,6 @@ const moveGuildDetail = () => {
 
 .post-title-container {
   max-width: 600px;
-  height: 300px;
   margin: auto;
   background-color: #0e0e0e;
   color: white;
@@ -167,7 +163,8 @@ const moveGuildDetail = () => {
 .post-writer-container {
   max-width: 600px;
   margin: auto;
-  background-color: #0e0e0e;
+  background-color: #383838;
+  height:500px;
   color: white;
   padding: 20px;
   border-radius: 10px;

@@ -13,18 +13,30 @@ const props=defineProps({
   },
   modelValue: {
     type: String,
-    default:''
+    default:"{\"type\":\"doc\",\"content\":[]}"
   }
   
 })
+const stop =watch(()=>props.modelValue,()=>{
+  editor.value.commands.setContent((JSON.parse(props.modelValue)))
+  stop();
+})
+watch(()=>props.isEdit,()=>{
+  editor.value.setEditable(props.isEdit)
+})
+
 const emits = defineEmits(['exportFileInfos','update:modelValue']);
 const showUploadModal = ref(false);
 const { VITE_API_BASE_URL } = import.meta.env;
 const isShowDetailImage = ref(false);
 const detailImage = ref(null);
 const editor = useEditor({
-  content: props.modelValue,
+  content: {},
   editable: props.isEdit,
+  onCreate:()=>{
+    
+
+  },
   onSelectionUpdate: () => {
 
 
@@ -33,6 +45,9 @@ const editor = useEditor({
       isShowDetailImage.value = true;
     }
 
+  },
+  onTransaction:()=>{
+    emits('update:modelValue', JSON.stringify(editor.value.getJSON()))
   },
   editorProps: {
     attributes: {
@@ -149,6 +164,7 @@ const clickImage = () => {
     interactiveDebounce: 75,
     delay:100,
     }"
+    class="menu-text-color"
   v-if="editor&&isEdit"
   >
   <v-btn-group
@@ -228,8 +244,11 @@ header{
   margin-top: 20px;
   margin-bottom: 14px;
 }
+.menu-text-color{
+  color:var(--rhp-c-text-1)
+}
 .tiptap-container:deep(.view-image){
-  width: 105%;
+  width: 100%;
   object-fit:cover;
 }
 </style>

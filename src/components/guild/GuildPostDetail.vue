@@ -2,10 +2,11 @@
 import { ref } from 'vue';
 import { getGuildPostDetails, guildPostDelete, } from "@/api/v1/guild";
 import { useRoute , useRouter} from "vue-router";
+import TheTiptapEditor from "../common/editor/TheTiptapEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
-
+const editMode=ref(false);
 // 게시글의 상세 정보를 저장할 반응형 변수
 const guildPostDetails = ref({});
 
@@ -44,7 +45,12 @@ const PostDelete = (guildpost) => {
   );
 };
 
-
+const changeEditMode=()=>{
+    editMode.value=!editMode.value
+    if(!editMode.value){
+        getGuildPostDetail();
+    }
+}
 
 </script>
 
@@ -52,7 +58,9 @@ const PostDelete = (guildpost) => {
 
     <div class="guildPost-title-container">
         <div class="guildPost-title">제목 : {{ guildPostDetails.title }}</div>
-        <div class="guildPost-content">내용 : {{  guildPostDetails.content }}</div>   
+        <div class="guildPost-content">
+            <the-tiptap-editor :is-edit="editMode"  :model-value="guildPostDetails.content"></the-tiptap-editor>
+        </div>   
     </div>
 
     <div class="guildPost-detail-container">
@@ -66,6 +74,7 @@ const PostDelete = (guildpost) => {
                 variant="elevated"
                 rounded="lg"
                 color="blue"
+                @click="changeEditMode"
                 >수정</v-btn
               >
               <v-btn
@@ -82,7 +91,6 @@ const PostDelete = (guildpost) => {
 <style scoped>
 .guildPost-title-container {
     max-width: 600px;
-    height: 300px;
     margin: auto;
     background-color: #0E0E0E;
     color: white;
