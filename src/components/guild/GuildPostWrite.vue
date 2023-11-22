@@ -63,6 +63,22 @@ const moveGuildDetail = () => {
 <template>
   <div>
     <div class="post-write-container">
+      <div class="post-detail-container">
+        <div class="user-info-bar">
+          <!-- 유저 프로필 이미지 -->
+          <img :src="profileImg" alt="User Profile" class="profile-image" />
+          <!-- 유저 정보 표시 -->
+          <div class="user-details">
+            <div class="user-id" hidden>{{ userStore.userInfo.userId }}</div>
+            <!-- guildId 기준으로 가져오기 필요 : Guild 이름-->
+            <div class="user-nickname">
+              {{ userStore.userInfo.userNickname }}
+            </div>
+            <div class="user-guild">{{ userStore.userInfo.guildId }}</div>
+          </div>
+        </div>
+
+      </div>
       <div class="post-title-container">
         <div>
           <!-- Text input for TITLE -->
@@ -83,27 +99,11 @@ const moveGuildDetail = () => {
           </div>
         <input type="number" class="useFile" v-model="isUseFile" hidden />
       </div>
-
       <div class="post-detail-container">
-        <div class="user-info-bar">
-          <!-- 유저 프로필 이미지 -->
-          <img :src="profileImg" alt="User Profile" class="profile-image" />
-          <!-- 유저 정보 표시 -->
-          <div class="user-details">
-            <div class="user-id" hidden>{{ userStore.userInfo.userId }}</div>
-            <!-- guildId 기준으로 가져오기 필요 : Guild 이름-->
-            <div class="user-nickname">
-              {{ userStore.userInfo.userNickname }}
-            </div>
-            <div class="user-guild">{{ userStore.userInfo.guildId }}</div>
-          </div>
-        </div>
-
-        <div class="editor-container"></div>
-        <!-- Submit button -->
-        <!-- <button class="submit-button" @click="submitGuildPost">글 작성하기</button> -->
+       
         <v-btn prepend-icon="$vuetify" variant="tonal" @click="submitGuildPost">글 작성하기</v-btn>
       </div>
+      
     </div>
   </div>
 </template>
@@ -145,6 +145,7 @@ const moveGuildDetail = () => {
 }
 .post-write-container {
   /* 스타일은 목업에 맞게 조정하세요. */
+  
 }
 
 .editor-container {
@@ -152,7 +153,7 @@ const moveGuildDetail = () => {
 }
 
 .post-title-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: auto;
   background-color: #0e0e0e;
   color: white;
@@ -161,16 +162,16 @@ const moveGuildDetail = () => {
 }
 
 .post-writer-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: auto;
   background-color: #383838;
-  height:500px;
+  height:1000px;
   color: white;
   padding: 20px;
   border-radius: 10px;
 }
 .post-detail-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: auto;
   background-color: #383838;
   color: white;

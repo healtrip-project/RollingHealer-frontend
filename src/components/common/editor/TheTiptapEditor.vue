@@ -40,7 +40,7 @@ const editor = useEditor({
   onSelectionUpdate: () => {
 
 
-    if (editor.value.isActive('image')) {
+    if (editor.value.isActive('image') && !props.isEdit) {
       detailImage.value= editor.value.getAttributes('image').src
       isShowDetailImage.value = true;
     }
@@ -233,6 +233,9 @@ header{
   overflow-y:auto;
 }
 
+.tiptap-container::-webkit-scrollbar{
+  display: none;
+}
   .tiptap-editor h1 {
   color: #fff;
   margin-top: 24px;

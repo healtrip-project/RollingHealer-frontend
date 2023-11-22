@@ -63,6 +63,8 @@ getPostList();
       <input type="text" v-model="searchQuery" placeholder="검색..." class="search-input" />
       <button @click="goToWritePost" class="write-post-btn">글 작성</button>
     </div>
+    
+    
     <!-- Posts container -->
     <div class="posts-container">
       <div v-for="(post, index) in postlist" :key="post.id" class="post-item">
@@ -85,6 +87,8 @@ getPostList();
 
       </div>
     </div>
+
+
   </div>
 </template>
 

@@ -1,8 +1,15 @@
 <script setup>
-import { getGuildDetails, getGuildPosts, joinGuild, getGuildMemberList } from "@/api/v1/guild";
+import {  getGuildDetails, getGuildPosts, joinGuild, getGuildMemberList } from "@/api/v1/guild";
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useLoginInfoStore } from "@/stores/loginInfo";
+import PostList from "./item/PostList.vue";
+import {getPostByGuildId } from "@/api/v1/post"
+
+// 여러 개의 기본 이미지 URL들을 배열로 정의
+const defaultImageUrl = 
+  'https://cdn.pixabay.com/photo/2022/11/14/10/37/chinese-lanterns-7591296_640.jpg';
+
 const route = useRoute();
 const router = useRouter();
 
@@ -10,7 +17,7 @@ const LoginInfoStore = useLoginInfoStore();
 
 const userInfo = computed(() => LoginInfoStore.userInfo);
 const guildDetails = ref({});
-console.dir(userInfo.value);
+// console.dir(userInfo.value);
 console.dir(guildDetails);
 
 const getGuild = () => {
@@ -27,6 +34,20 @@ const getGuild = () => {
 };
 getGuild();
 
+const guildColumns = ref([]);
+const getGuildPost = () => {
+  getPostByGuildId(
+    route.params.id,
+    ({ data }) => {
+      // console.dir(data);
+      guildColumns.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
+}
+getGuildPost()
 
 
 const guildPostlist = ref([]);
@@ -75,7 +96,7 @@ const guildJoin = () => {
         route.params.id,
         userInfo.value.userId,
         ({ data }) => {
-          console.log(data);
+          // console.log(data);
         },
         (error) => {
           console.log(error);
@@ -92,7 +113,7 @@ const getGuildMembers = () => {
   getGuildMemberList(
     route.params.id,
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       guildMemberlist.value = data;
     },
     (error) => {
@@ -154,46 +175,84 @@ getGuildMembers()
       </v-card>
     </div>
 
+
+
+    <!-- 오른쪽 길드 활동 게시판 -->
+
     <div class="main-content">
+      
+      <!-- 길드 칼럼 & 플랜 -->
       <div class="guild-action-list">
-        <div class="guild-column">칼럼</div>
-        <div class="guild-healingplan">힐링플랜</div>
+        <div class="controls">
+          <div class="vue-name">길드 맴버 칼럼</div> 
+          <v-virtual-scroll>
+
+            
+          </v-virtual-scroll>
+        </div>  
+    
+      
       </div>
+
+      <!-- 길드 자유게시판 -->
       <div class="guild-post-list">
-        <div>길드 자유게시판</div>
-
-        <!-- <div v-if> -->
+      <div class="controls">
+        <div class="vue-name">길드자유게시판</div> 
         <v-btn variant="tonal" @click="goGuildPostWrite"> 게시글 작성 </v-btn>
-        <!-- </div> -->
+      </div>  
 
-        <div
-          v-for="guildpost in guildPostlist"
-          :key="guildpost.postId"
-          class="guildpostitem"
+        <PostList :items="guildPostlist">
+        </PostList>
+
+        <!-- <v-virtual-scroll
+          max-height="400px"
+          :items="guildPostlist"
         >
-          <div class="guild-post-content">
+          <template v-slot:default="{ item }">
             <RouterLink
               :to="{
                 name: 'GuildPostDetail',
                 params: {
-                  alias: guildDetails.guildAlias,
-                  id: guildDetails.guildId,
-                  postId: guildpost.postId,
+                  alias: item.guildAlias,
+                  id: item.guildId,
+                  postId: item.postId,
                 },
               }"
             >
-              <h2 class="post-title">{{ guildpost.title }}</h2>
-              <p class="post-createdBy">{{ guildpost.createdBy }}</p>
-              <p class="post-createdAt">{{ guildpost.createdAt }}</p>
+            <v-card 
+              class="mx-auto"
+              max-width="90%"
+              :title="item.title"
+              :subtitle="item.createdAt"
+              color="indigo-darken-3"
+              prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
+              link
+              >
+            </v-card>
             </RouterLink>
-          </div>
-        </div>
+            <br>
+          </template>
+        </v-virtual-scroll> -->
+
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.vue-name {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+}
 .main-container {
   display: flex;
   height: 100vh;
@@ -205,9 +264,7 @@ getGuildMembers()
   flex: 1; /* flex 비율 설정 */
   flex-direction: column;
   flex: 1, 1, 0; /* Adjust width as necessary */
-  background-color: var(
-    --color-background-lightred
-  ); /* Adjust color as necessary */
+  background-color: #0E0E0E;/* Adjust color as necessary */
 }
 
 .guild-user-list {
@@ -227,7 +284,7 @@ getGuildMembers()
   flex-direction: column;
   flex: 3; /* flex 비율 설정 */
   /* text-align: center; */
-  background-color: var(--color-background-lightsky);
+  background-color: #383838;
   height: 100vh;
 }
 .guild-description {
@@ -235,17 +292,17 @@ getGuildMembers()
 }
 
 .guild-action-list {
-  flex: 1;
+  min-height: 50%;
 }
 
 .guild-post-list {
-  flex: 1;
-  background-color: #719427;
+  /* background-color: #719427; */
+  /* min-height: 50%; */
+
+
 }
 
-.guild-healingplan {
-  background-color: blue;
-}
+
 .guild-column {
   background-color: blueviolet;
 }
@@ -256,5 +313,6 @@ getGuildMembers()
   border-radius: 30%;
   /* justify-content: center; */
   text-align: center;
+  
 }
 </style>

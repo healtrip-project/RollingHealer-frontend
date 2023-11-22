@@ -55,20 +55,21 @@ const changeEditMode=()=>{
 </script>
 
 <template>
-
+<div class="guildPost-detail-container">
+        <div class="guildPost-writer-container">
+            <div class="guildPost-createAt">작성자 : {{ guildPostDetails.createdBy }}</div>
+            <!-- <div class="guildPost-createAt-guild">길드 : {{ guildPostDetails.guildId }}</div> -->
+        </div>
+        <div class="guildPost-createBy">작성일 : {{ guildPostDetails.createdAt }}</div>
+        
+    </div>
     <div class="guildPost-title-container">
         <div class="guildPost-title">제목 : {{ guildPostDetails.title }}</div>
         <div class="guildPost-content">
             <the-tiptap-editor :is-edit="editMode"  :model-value="guildPostDetails.content"></the-tiptap-editor>
         </div>   
     </div>
-
-    <div class="guildPost-detail-container">
-        <div class="guildPost-writer-container">
-            <div class="guildPost-createAt">작성자 : {{ guildPostDetails.createdBy }}</div>
-            <!-- <div class="guildPost-createAt-guild">길드 : {{ guildPostDetails.guildId }}</div> -->
-        </div>
-        <div class="guildPost-createBy">작성일 : {{ guildPostDetails.createdAt }}</div>
+    <div class="guildPost-writer-container">
         <div v-if="guildPostDetails.createdBy">
               <v-btn
                 variant="elevated"
@@ -85,7 +86,8 @@ const changeEditMode=()=>{
                 >삭제</v-btn
               >
             </div>
-    </div>
+        </div>
+    
 </template>
 
 <style scoped>

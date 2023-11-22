@@ -8,6 +8,14 @@ async function getPost(success, fail) {
   local.defaults.headers["Authorization"] = ulis.accessToken;
   await local.get(`/post`).then(success).catch(fail);
 }
+
+async function getPostByGuildId(guildId, success, fail) {
+  const ulis = useLoginInfoStore();
+local.defaults.headers["Authorization"] = ulis.accessToken;
+await local.get(`/post/guild/${guildId}`).then(success).catch(fail);
+}
+
+
 // async function getPost(success, fail) {
 //     local.defaults.headers["Authorization"] = loginInfoStore.accessToken;
 //     await local.get(`/post`).then(success).catch(fail);
@@ -24,4 +32,4 @@ async function getPostDetails(postId, success, fail) {
 
 
 
-export { getPost, writePost, getPostDetails  };
+export { getPost, writePost, getPostDetails , getPostByGuildId };

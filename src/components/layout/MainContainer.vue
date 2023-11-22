@@ -9,9 +9,6 @@ import ModalContainer from "./ModalContainer.vue";
         <slot name="header"></slot>
         <div class="main-content">
             <slot name="main"></slot>
-            <!-- <ModalContainer class="editor-test-box">
-                <TheTiptapEditor isEdit></TheTiptapEditor>
-            </ModalContainer> -->
         </div>
         <slot name="footer"></slot>
     </div>
