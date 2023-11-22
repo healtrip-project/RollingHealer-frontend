@@ -16,20 +16,23 @@ const props=defineProps({
     color:'var(--rhp-c-background-3)',
 
   })
+  console.log(props.itemList)
 </script>
 
 <template>
   <v-container>
     <v-row>
-      <slot name="header"></slot>
+      <slot name="header" class="title-text"></slot>
     </v-row>
     <v-row>
       <v-sheet
-    class="mx-auto  item-group-list-area"
+    class="item-group-list-area "
     max-width="800">
     <v-slide-group 
     selected-class="bg-primary"
-    show-arrows>
+    show-arrows
+    center-active
+    >
 
           <v-slide-group-item
            v-slot="{ isSelected, selectedClass, toggle,}"
@@ -37,18 +40,19 @@ const props=defineProps({
         :key="index"
            >
             <v-card
-              :class="['d-flex justify-center','ma-4','heart-box', selectedClass]"
-              width="100"
-              height="100"
+              :class="['d-flex justify-center','text-center','ma-4','heart-box','rounded-lg','grey-darken-4', selectedClass]"
+              :style="{backgroundColor:'black'}"
+              width="130"
+              height="130"
               @click="toggle"
-              hover
-
+              hover 
+              :image="item.firstimage || item.firstimage2 "
             >
-            {{ item }}
+            <div class="title-text mt-10">{{ item?.title }}</div>
               <div
-                class="text-h3 flex-grow-1
-                mt-10
-                 text-end heart-button"
+                class="text-h3
+                 text-end heart-button
+                 "
               >
                 <v-btn :style="heartStyle" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
               </div>
@@ -68,8 +72,18 @@ const props=defineProps({
 }
 .heart-box:deep(.heart-button){
   visibility: hidden;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 .heart-box:hover:deep(.heart-button){
   visibility: visible;
+}
+.title-text{
+  font-weight: bold;
+  font-size: 0.9rem;
+  word-break: keep-all;
+  color:whitesmoke;
+  justify-content: center;
 }
 </style>
