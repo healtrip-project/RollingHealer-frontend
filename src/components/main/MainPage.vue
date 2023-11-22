@@ -1,22 +1,33 @@
 <script setup>
+import { getPlaceData } from "@/api/v1/place";
 import SlideListContainer from '../layout/SlideListContainer.vue';
 import MainCenterBanner from '@/components/main/item/MainCenterBanner.vue'
+import PlaceItemGroupList from '@/components/place/item/placeItemGroupList.vue'
+import { ref } from "vue";
+const hotPlaceList=ref({})
+getPlaceData({
+  sidocode:1,
 
+},({data})=>{
+  hotPlaceList.value=data;
+},(error)=>{
+  console.log(error)
+})
 </script>
 
 <template>
   <div class="main-container">
     <div class="main-top-area">떠나고 싶은 어디든 롤링힐러</div>
-    <SlideListContainer title="오늘의 힐링">
-
-    </SlideListContainer>
+    <PlaceItemGroupList class="mt-5" :item-list="['내용']" >
+      <template #header><span class="place-list-title">오늘의 힐링</span></template>
+    </PlaceItemGroupList>
     <MainCenterBanner></MainCenterBanner>
-    <SlideListContainer title="지금 뜨는 장소">
-
-    </SlideListContainer>
-    <SlideListContainer title="베스트 힐러">
-
-    </SlideListContainer>
+    <PlaceItemGroupList  class="mt-5" :item-list="hotPlaceList" >
+      <template #header><span class="place-list-title">지금 뜨는 장소</span></template>
+    </PlaceItemGroupList>
+     <PlaceItemGroupList  class="mt-5" :item-list="hotPlaceList" >
+      <template #header><span class="place-list-title">베스트힐러</span></template>
+    </PlaceItemGroupList>
   </div>
 </template>
 
@@ -28,4 +39,9 @@ import MainCenterBanner from '@/components/main/item/MainCenterBanner.vue'
     font-size: 1.5rem;
     font-weight: bold;
   }
+  .place-list-title{
+  font-weight: bold;
+  padding-left: 1.2rem;
+  font-size: 1.2rem;
+}
 </style>

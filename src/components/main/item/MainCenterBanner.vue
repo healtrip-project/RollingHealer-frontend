@@ -1,17 +1,37 @@
 <script setup>
+import { ref } from "vue";
 
+  const onboarding=ref(false)
+  const itemList =ref([{title:"배너1"},{title:"배너2"}])
 </script>
 
 <template>
-  <div class="banner-large-content">
-
-  </div>
+   <v-window
+    v-model="onboarding"
+    show-arrows="hover"
+    class="main-window-banner"
+  >
+    <v-window-item
+      v-for="(item,index) in itemList"
+      :key="`card-${index}`"
+    >
+      <v-card
+        elevation="2"
+        height="200"
+        class="d-flex align-center justify-center ma-2"
+      >
+        <h1
+          class="text-h2"
+        >
+          {{ item.title}}
+        </h1>
+      </v-card>
+    </v-window-item>
+  </v-window>
 </template>
 
 <style scoped>
-  .banner-large-content{
-    width: 80%;
-    min-height: 250px;
-    background-color: rgba(255,255,255,0.5);
-  }
+.main-window-banner{
+  color:black;
+}
 </style>

@@ -30,7 +30,7 @@ const moveGuild = () => {
             <TopNavList class="ms-10">
                 <NavListItem>힐링플랜</NavListItem>
                 <NavListItem @click="movePost">칼럼</NavListItem>
-                <NavListItem :item-link="{name:'map'}">장소</NavListItem>
+                <NavListItem :item-link="{name:'Place'}">장소</NavListItem>
                 <NavListItem @click="moveGuild">길드</NavListItem>
             </TopNavList>
             <LoginForm></LoginForm>
