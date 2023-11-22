@@ -1,5 +1,6 @@
 <script setup>
 import { computed,ref } from "vue";
+import { useRouter } from "vue-router";
 
 const props=defineProps({
     itemList:{
@@ -7,6 +8,7 @@ const props=defineProps({
       
     }
   }) 
+  const router=useRouter()
     
   // const slideStyle=ref({
   //   backgroundColor:'var(--rhp-c-background-1)',
@@ -17,6 +19,12 @@ const props=defineProps({
 
   })
   console.log(props.itemList)
+  const handleClick=(e,item)=>{
+    console.log(item)
+    if(item?.postId){
+      router.push({ name: 'PostDetail', params: { id: item.postId } })
+    }
+  }
 </script>
 
 <template>
@@ -38,6 +46,7 @@ const props=defineProps({
            v-slot="{ isSelected, selectedClass, toggle,}"
            v-for="(item,index) in itemList"
         :key="index"
+        @click="()=>handleClick(item)"
            >
             <v-card
               :class="['d-flex justify-center','text-center','ma-4','heart-box','rounded-lg','grey-darken-4', selectedClass]"
@@ -48,14 +57,16 @@ const props=defineProps({
               hover 
               :image="item.firstimage || item.firstimage2 "
             >
-            <div class="title-text mt-10">{{ item?.title }}</div>
+            <div class="mt-10"><p class="title-text">{{ item?.title }}</p></div>
               <div
                 class="text-h3
                  text-end heart-button
                  "
               >
                 <v-btn :style="heartStyle" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+              
               </div>
+              <slot name="createBy"></slot>
             </v-card>
         </v-slide-group-item>
   </v-slide-group> 
@@ -86,4 +97,5 @@ const props=defineProps({
   color:whitesmoke;
   justify-content: center;
 }
+
 </style>

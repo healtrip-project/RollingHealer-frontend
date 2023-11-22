@@ -4,7 +4,9 @@ import SlideListContainer from '../layout/SlideListContainer.vue';
 import MainCenterBanner from '@/components/main/item/MainCenterBanner.vue'
 import PlaceItemGroupList from '@/components/place/item/placeItemGroupList.vue'
 import { ref } from "vue";
+import { getPost } from "@/api/v1/post";
 const hotPlaceList=ref({})
+const postList=ref([])
 getPlaceData({
   sidocode:1,
 
@@ -13,12 +15,18 @@ getPlaceData({
 },(error)=>{
   console.log(error)
 })
+
+getPost(({data})=>{
+postList.value=data
+},()=>{
+
+})
 </script>
 
 <template>
   <div class="main-container">
     <div class="main-top-area">떠나고 싶은 어디든 롤링힐러</div>
-    <PlaceItemGroupList class="mt-5" :item-list="['내용']" >
+    <PlaceItemGroupList class="mt-5" :item-list="postList" >
       <template #header><span class="place-list-title">오늘의 힐링</span></template>
     </PlaceItemGroupList>
     <MainCenterBanner></MainCenterBanner>
