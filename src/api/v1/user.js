@@ -19,7 +19,7 @@ async function userUploadthumbnail(uploadthumbnailFileUrl, success, fail) {
   await local
     .post(
       `/user/${store.userInfo.userId}/uploadthumbnail`,
-      uploadthumbnailFileUrl.replace(/\\"/gi, "")
+      (uploadthumbnailFileUrl.replace(/\\"/gi, ""))
     )
     .then(success)
     .catch(fail);

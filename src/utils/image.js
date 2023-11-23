@@ -37,9 +37,10 @@ const defaultImageUrls = [
 ];
 
 function contentImageParser(item,index) {
-  // 이미지 요소가 있으면 그의 src 속성을 반환하고, 없으면 빈 문자열 반환]
+
 
   return (
+    (item?.userThumbnailFileUrl ? VITE_API_BASE_URL+item.userThumbnailFileUrl : null)||
     (item?.guildThumbnailFileUrl ? VITE_API_BASE_URL+item.guildThumbnailFileUrl : null) ||
     item.firstimage ||
     item.firstimage2 ||
