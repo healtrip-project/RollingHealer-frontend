@@ -42,7 +42,7 @@ async function previewImage(uri, success, fail) {
 }
 
 async function downloadImage(uri,success, fail) {
-  await local.post(uri).then(success).catch(fail);
+  await local.get(uri, { responseType: 'blob' }).then(success).catch(fail);
 }
 
 

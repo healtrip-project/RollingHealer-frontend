@@ -1,6 +1,6 @@
 <script setup>
   import TheListContentListTop from "../common/list/TheListContentListTop.vue";
-import PlaceItemGroupList from "./item/placeItemGroupList.vue";
+import PlaceItemGroupList from "./item/PlaceItemGroupList.vue";
 import {getPlaceData} from "@/api/v1/place"
 import { ref } from "vue";
 //관광타입(12:관광지, 14:문화시설, 15:축제공연행사, 25:여행코스, 28:레포츠, 32:숙박, 38:쇼핑, 39:음식점) ID
@@ -54,7 +54,6 @@ getPlaceData({
     <TheListContentListTop>
       장소 리스트
       <template #right-side>
-        테스트
       </template>
     </TheListContentListTop>
     <PlaceItemGroupList v-for="(places,key, index) in placeListData" :key="index" :item-list="places">

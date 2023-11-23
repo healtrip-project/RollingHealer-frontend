@@ -9,16 +9,17 @@ import { ref } from "vue";
    <v-window
     v-model="onboarding"
     show-arrows="hover"
-    class="main-window-banner"
+    class="main-window-banner mx-auto text-no-wrap "
   >
     <v-window-item
       v-for="(item,index) in itemList"
       :key="`card-${index}`"
+      
     >
       <v-card
         elevation="2"
         height="200"
-        class="d-flex align-center justify-center ma-2"
+        class="d-flex  align-center justify-center "
       >
         <h1
           class="text-h2"
@@ -33,5 +34,6 @@ import { ref } from "vue";
 <style scoped>
 .main-window-banner{
   color:black;
+  min-width:650px;
 }
 </style>
