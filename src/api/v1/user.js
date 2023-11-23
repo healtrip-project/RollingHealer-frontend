@@ -14,6 +14,11 @@ async function findById(userid, success, fail) {
   await local.get(`/user/${userid}`).then(success).catch(fail);
 }
 
+async function userJoin(data, success, fail) {
+
+  await local.post(`/auth/join`, {...data}).then(success).catch(fail);
+}
+
 async function tokenRegeneration(success, fail) {
   await local.post(`/auth/refresh`).then(success).catch(fail);
 }
