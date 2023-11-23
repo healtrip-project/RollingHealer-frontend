@@ -53,7 +53,7 @@ const props=defineProps({
         hover 
         :image="contentImageParser(item)"
         >
-            <div class=" d-flex flex-column mt-11 w-100"><p class="title-text">({{ item?.title }}||{{item?.userId}})</p><p class="low-text">{{ item?.createBy }}</p></div>
+            <div class=" d-flex flex-column mt-11 w-100"><p class="title-text" >{{ item?.title ||item?.userNickname }}</p><p class="low-text">{{ item?.createBy }}</p></div>
             
               <div
                 class="text-h3
