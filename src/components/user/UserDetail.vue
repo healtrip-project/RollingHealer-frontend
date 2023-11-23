@@ -1,13 +1,14 @@
 <script setup>
-import {
-  getGuildDetails,
-} from "@/api/v1/guild";
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useLoginInfoStore } from "@/stores/loginInfo";
 import {findById, userUploadthumbnail} from "@/api/v1/user"
 import { contentImageParser } from "@/utils/image";
+import {getPost} from "@/api/v1/post"
 import ImageForm from "../common/image/ImageForm.vue";
+import UserDetailPostList from "./item/UserDetailPostList.vue";
+import TheListContentListTop from "../common/list/TheListContentListTop.vue";
+import { onMounted } from "vue";
 
 // 여러 개의 기본 이미지 URL들을 배열로 정의
 const defaultImageUrl =
@@ -47,6 +48,21 @@ const handleThumbnailUpload=(image)=>{
     console.log(error)
   })
 }
+const postlist = ref([]);
+
+const getPostList = () => {
+  getPost(
+    ({ data }) => {
+      console.dir(data)
+      postlist.value = data;
+    }, (error) => {
+        console.log(error);
+    }
+    );
+}
+onMounted(()=>{
+  getPostList();
+})
 </script>
 
 <template>
@@ -121,11 +137,15 @@ const handleThumbnailUpload=(image)=>{
 
     <div class="main-content">
       <!-- 맴버 칼럼 & 플랜 -->
-      <div class="action-list">
-        <div class="controls">
-          <div class="vue-name">{{ userDetails.userNickname }}의 칼럼</div>
-        </div>
-        <GuildDetailColumnList :items="userColumns"> </GuildDetailColumnList>
+      <div class="post-list">
+        <TheListContentListTop>
+          {{ userDetails.userNickname }}의 칼럼
+          <template #right-side>
+
+            <!--<v-btn variant="tonal" @click="goGuildPostWrite"> 더보기 </v-btn>-->
+          </template>
+        </TheListContentListTop>
+        <UserDetailPostList :itemList="postlist"></UserDetailPostList>
         
       </div>
 
@@ -184,13 +204,11 @@ const handleThumbnailUpload=(image)=>{
   max-height: 10rem;
 }
 
-.action-list {
-  min-height: 50%;
-}
+
 
 .post-list {
-  /* background-color: #719427; */
-  /* min-height: 50%; */
+  min-height: 50%;
+  
 }
 
 .post-content {

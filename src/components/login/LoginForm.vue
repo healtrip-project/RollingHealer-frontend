@@ -11,7 +11,7 @@ const userId = ref("");
 const password = ref("");
 const loginStore = useLoginInfoStore();
 const userInfo = computed(() => loginStore.userInfo);
-const isLogin = computed(() => loginStore.isLogin);
+const isLogin = loginStore.isLogin;
 const router = useRouter();
 
 const join = ref({

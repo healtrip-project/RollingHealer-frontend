@@ -5,6 +5,10 @@ const emits=defineEmits(['update:modelValue'])
 defineProps({
   modelValue:{
     tyep:String,
+  },
+  Searchbar:{
+    type:Boolean,
+    default:false
   }
 })
 const handleSearchInput=(e)=>{
@@ -17,7 +21,8 @@ const handleSearchInput=(e)=>{
       <div class="vue-name"><slot name="default"></slot></div>
       <input type="text" 
       :value="modelValue"
-      @input="handleSearchInput" placeholder="검색..." class="search-input" />
+      @input="handleSearchInput" placeholder="검색..." class="search-input"
+      v-if="Searchbar" />
       <slot name="right-side" ></slot>
     </div>
 </template>
