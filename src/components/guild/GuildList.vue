@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { getGuild } from "@/api/v1/guild"
+import { contentImageParser } from "@/utils/image";
 
 const router = useRouter();
 const guildlist = ref([]);
@@ -51,10 +52,10 @@ getGuildList();
     </div>
     <!-- Guilds container -->
     <div class="guilds-container">
-      <div v-for="(guild, index) in guildlist" :key="guild.alias" class="guild-item">
+      <div v-for="(guild) in guildlist" :key="guild.alias" class="guild-item">
         <RouterLink :to="{ name: 'GuildDetail', params: { alias: guild.guildAlias , id:guild.guildId} }"> 
        <!-- Extract the first image from guild content and use it as the background -->
-        <div class="guild-image" :style="{ backgroundImage: 'url(' + defaultImageUrls[index % defaultImageUrls.length] + ')' }">
+        <div class="guild-image" :style="{ backgroundImage: 'url(' + contentImageParser(guild) + ')' }">
          <!-- <div class="guild-image" :style="{ backgroundImage: 'url(' + extractFirstImage(guild.content, index) + ')' }"> -->
           <!-- guild text content -->
           <div class="guild-content">

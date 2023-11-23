@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import {getPost} from "@/api/v1/post"
+import { contentImageParser } from "@/utils/image";
 
 const postlist = ref([]);
 
@@ -18,26 +19,6 @@ const getPostList = () => {
 
 const router = useRouter();
 
-// 여러 개의 기본 이미지 URL들을 배열로 정의
-const defaultImageUrls = [
-  'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D',
-  'https://cdn.pixabay.com/photo/2022/11/14/10/37/chinese-lanterns-7591296_640.jpg',
-  'https://cdn.pixabay.com/photo/2020/06/30/15/03/table-5356682_640.jpg',
-  'https://cdn.pixabay.com/photo/2019/06/25/13/59/city-4298285_640.jpg'
-  // 추가 이미지 URL들...
-];
-
-
-// Tiptap에서 생성된 컨텐츠의 첫 번째 이미지 URL을 추출하는 함수
-function extractFirstImage(content, index) {
-  // DOMParser를 사용하여 HTML 문자열을 파싱
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(content, 'text/html');
-  // 첫 번째 이미지 요소를 찾음
-  const firstImage = doc.querySelector('img');
-  // 이미지 요소가 있으면 그의 src 속성을 반환하고, 없으면 빈 문자열 반환
-  return firstImage ? firstImage.src : defaultImageUrls[index % defaultImageUrls.length];
-}
 
 // 검색어를 저장할 ref 생성
 const searchQuery = ref('');
@@ -70,7 +51,7 @@ getPostList();
       <div v-for="(post, index) in postlist" :key="post.id" class="post-item">
        <!-- Extract the first image from post content and use it as the background -->
        <RouterLink :to="{ name: 'PostDetail', params: { id: post.postId } }"> 
-         <div class="post-image" :style="{ backgroundImage: 'url(' + extractFirstImage(post.content, index) + ')' }">
+         <div class="post-image" :style="{ backgroundImage: 'url(' + contentImageParser(post, index) + ')' }">
           <!-- Post text content -->
           <div class="post-content">
             <!-- post 제목 -->

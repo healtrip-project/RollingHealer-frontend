@@ -10,7 +10,17 @@ const isUploading = ref(false);
 const showError = ref(false);
 const errorMessage = ref('');
 const uploadProgressPercent = ref(0);
-defineProps(['showUpload'])
+const props =defineProps({
+  showUpload:{
+    type:Boolean,
+    default:false,
+  },
+  singleUpload:{
+    type:Boolean,
+    default:false,
+  }
+
+})
 const emits=defineEmits(['successUpload','progress','update:showUpload'])
 
 
@@ -57,6 +67,11 @@ const setFileInfo = (files) => {
   };
 const handleUpload=()=>{
 
+  if(props.singleUpload&&(uploadFiles.value?.length>1||uploadFiles.value===null||uploadFiles.value===undefined)){
+    showError.value = true;
+    errorMessage.value = "한 개의 이미지만 업로드 가능합니다. 하나만 선택해주세요.";
+    return;
+  }
   isUploading.value=true
   uploadImage(uploadFiles.value,
     ({ data }) => {

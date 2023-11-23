@@ -60,21 +60,35 @@ async function joinGuild (guildId, userId, success, fail) {
   await local.put(`/guild/${guildId}/join/${userId}`).then(success).catch(fail);
 }
 
+
+
 async function getGuildMemberList (guildId, success, fail) {
   const ulis = useLoginInfoStore();
   local.defaults.headers["Authorization"] = ulis.accessToken;
   await local.get(`/guild/${guildId}/members`).then(success).catch(fail);
 }
 
+async function guildUploadthumbnail(uploadFileData, success, fail) {
+  const {uploadthumbnailFileUrl,guildAlias}=uploadFileData
+  console.log(uploadFileData)
+  const store = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = store.accessToken;
+  await local
+    .post(`/guild/${guildAlias}/uploadthumbnail`, uploadthumbnailFileUrl.replace(/\\"/gi,""))
+    .then(success)
+    .catch(fail);
+}
+
 export {
-  checkAliasAvailability, 
-  getGuild , 
-  makeGuild, 
-  getGuildDetails, 
-  getGuildPosts, 
-  guildPostWrite, 
-  guildPostDelete, 
+  checkAliasAvailability,
+  getGuild,
+  makeGuild,
+  getGuildDetails,
+  getGuildPosts,
+  guildPostWrite,
+  guildPostDelete,
   getGuildPostDetails,
-  joinGuild, 
+  joinGuild,
   getGuildMemberList,
+  guildUploadthumbnail,
 };

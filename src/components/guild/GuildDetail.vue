@@ -4,24 +4,24 @@ import {
   getGuildPosts,
   joinGuild,
   getGuildMemberList,
+  guildUploadthumbnail,
 } from "@/api/v1/guild";
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useLoginInfoStore } from "@/stores/loginInfo";
 import PostList from "./item/GuildDetailPostList.vue";
 import GuildDetailColumnList from "./item/GuildDetailColumnList.vue"
+import {contentImageParser} from "@/utils/image"
 
 import { getPostByGuildId } from "@/api/v1/post";
+import ImageForm from "../common/image/ImageForm.vue";
 
-// 여러 개의 기본 이미지 URL들을 배열로 정의
-const defaultImageUrl =
-  "https://cdn.pixabay.com/photo/2022/11/14/10/37/chinese-lanterns-7591296_640.jpg";
 
 const route = useRoute();
 const router = useRouter();
 
 const LoginInfoStore = useLoginInfoStore();
-
+const showUploadModal=ref(false);
 const userInfo = computed(() => LoginInfoStore.userInfo);
 const guildDetails = ref({});
 // console.dir(userInfo.value);
@@ -40,7 +40,7 @@ const getGuild = () => {
   );
 };
 getGuild();
-
+const { VITE_API_BASE_URL } = import.meta.env;
 const guildColumns = ref([]);
 const getGuildPost = () => {
   getPostByGuildId(
@@ -128,11 +128,26 @@ const getGuildMembers = () => {
   );
 };
 getGuildMembers();
+const handleGuildImage=()=>{
+  showUploadModal.value=true;
+}
+
+const handleThumbnailUpload= (image)=>{
+  console.log(guildDetails.value.guildAlias)
+  guildUploadthumbnail({
+    guildAlias:guildDetails.value.guildAlias,
+    uploadthumbnailFileUrl:image[0].fileImage,
+  },({data})=>{
+    guildDetails.value.guildThumbnailFileUrl=image[0].fileImage;
+  },(error)=>{
+    console.log(error)
+  })
+}
 </script>
 
 <template>
   <div class="main-container">
-
+    
     <div class="left-side">
       <v-card 
         class="guild-detail-card" 
@@ -141,10 +156,12 @@ getGuildMembers();
         >
         <v-img
           class="align-end text-white"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          :src="contentImageParser(guildDetails)||'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
           width="200px"
           cover
+          @click="handleGuildImage"
         >
+        <ImageForm  v-model:showUpload="showUploadModal" single-upload @success-upload="handleThumbnailUpload"></ImageForm>
           <v-card-title>{{ guildDetails.guildName }}</v-card-title>
         </v-img>
 

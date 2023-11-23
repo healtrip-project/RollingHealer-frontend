@@ -2,6 +2,7 @@
 import { Editor } from "@tiptap/vue-3";
 import { computed,ref } from "vue";
 import { useRouter } from "vue-router";
+import { firstImageParingTest,contentImageParser } from "@/utils/image";
 const emits=defineEmits(['clickItem'])
 const props=defineProps({
     itemList:{
@@ -19,27 +20,7 @@ const props=defineProps({
     color:'var(--rhp-c-background-3)',
 
   })
-const testImageParser = (json) => {
-    for (const attr in json) {
-      if (json[attr] !== null && json[attr] !== undefined&&typeof json[attr]=='object')
-        if (attr === 'attrs') {
-          
-          return json[attr].src
-        } else {
-          return testImageParser(json[attr])
-        }
-        
-    }
-  }
-const firstImageParingTest = (json) => {
-  if (!json) { return; }
-  for (const attr in json) {
-    if (json[attr] !== null && json[attr] !== undefined&&typeof json[attr]=='object') {
-      
-      return testImageParser(json[attr])
-    }
-  }
-}
+
 </script>
 
 <template>
@@ -70,7 +51,7 @@ const firstImageParingTest = (json) => {
         @click="toggle"
         :to="(item?.postId&&{ name: 'PostDetail', params: { id: item.postId } })"
         hover 
-        :image="item.firstimage || item.firstimage2 ||firstImageParingTest(item?.content&&JSON.parse(item?.content))"
+        :image="contentImageParser(item)"
         >
             <div class=" d-flex flex-column mt-11 w-100"><p class="title-text">{{ item?.title }}</p><p class="low-text">{{ item?.createBy }}</p></div>
             

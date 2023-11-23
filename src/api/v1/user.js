@@ -13,6 +13,17 @@ async function findById(userid, success, fail) {
   local.defaults.headers["Authorization"] = store.accessToken;
   await local.get(`/user/${userid}`).then(success).catch(fail);
 }
+async function userUploadthumbnail(uploadthumbnailFileUrl, success, fail) {
+  const store = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = store.accessToken;
+  await local
+    .post(
+      `/user/${store.userInfo.userId}/uploadthumbnail`,
+      uploadthumbnailFileUrl.replace(/\\"/gi, "")
+    )
+    .then(success)
+    .catch(fail);
+}
 
 async function userJoin(data, success, fail) {
 
@@ -29,4 +40,5 @@ async function logout(userid, success, fail) {
   await local.get(`/user/logout`).then(success).catch(fail);
 }
 
-export { userConfirm, findById, tokenRegeneration, logout };
+
+export { userConfirm, findById, tokenRegeneration, logout, userUploadthumbnail };
