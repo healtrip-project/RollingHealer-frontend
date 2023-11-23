@@ -49,18 +49,18 @@ const props=defineProps({
         width="130"
         height="130"
         @click="toggle"
-        :to="(item?.postId&&{ name: 'PostDetail', params: { id: item.postId } })"
+        :to="((item?.postId&&{ name: 'PostDetail', params: { id: item.postId } })||(item?.userId&&{name:'UserDetail',params:{userid:item.userId}}))"
         hover 
         :image="contentImageParser(item)"
         >
-            <div class=" d-flex flex-column mt-11 w-100"><p class="title-text">{{ item?.title }}</p><p class="low-text">{{ item?.createBy }}</p></div>
+            <div class=" d-flex flex-column mt-11 w-100"><p class="title-text">({{ item?.title }}||{{item?.userId}})</p><p class="low-text">{{ item?.createBy }}</p></div>
             
               <div
                 class="text-h3
                  text-end heart-button
                  "
               >
-                <v-btn v-show="!(item?.postId)" :style="heartStyle" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
+                <v-btn v-show="!(item?.postId||item?.userId)" :style="heartStyle" :icon="isSelected ? 'mdi-heart' : 'mdi-heart-outline'"></v-btn>
               
               </div>
             </v-card>

@@ -38,8 +38,10 @@ async function logout(userid, success, fail) {
   local.defaults.headers["Authorization"] = store.accessToken;
   await local.get(`/user/logout`).then(success).catch(fail);
 }
-
+async function getUserList(success, fail) {
+  await local.get(`/user/`).then(success).catch(fail);
+}
 
 export { userConfirm, findById, tokenRegeneration, logout,
   userJoin
-, userUploadthumbnail };
+, userUploadthumbnail,getUserList };

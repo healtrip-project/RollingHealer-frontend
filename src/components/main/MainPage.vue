@@ -5,8 +5,11 @@ import MainCenterBanner from '@/components/main/item/MainCenterBanner.vue'
 import PlaceItemGroupList from '@/components/place/item/PlaceItemGroupList.vue'
 import { ref } from "vue";
 import { getPost } from "@/api/v1/post";
+import { getUserList } from "@/api/v1/user";
+import UserDetailPostList from "../user/item/UserDetailPostList.vue";
 const hotPlaceList=ref({})
-const postList=ref([])
+const postList = ref([])
+const userList=ref([])
 getPlaceData({
   sidocode:1,
 
@@ -21,6 +24,11 @@ postList.value=data
 },()=>{
 
 })
+getUserList(({ data })=> {
+userList.value=data
+}, (error) => {
+  console.log(error)
+})
 </script>
 
 <template>
@@ -33,7 +41,7 @@ postList.value=data
     <PlaceItemGroupList  class="mt-5" :item-list="hotPlaceList" >
       <template #header><span class="place-list-title text-no-wrap">지금 뜨는 장소</span></template>
     </PlaceItemGroupList>
-     <PlaceItemGroupList  class="mt-5" :item-list="hotPlaceList" >
+     <PlaceItemGroupList  class="mt-5" :item-list="userList" >
       <template #header><span class="place-list-title text-no-wrap">베스트힐러</span></template>
     </PlaceItemGroupList>
   </div>
