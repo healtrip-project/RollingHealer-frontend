@@ -11,7 +11,7 @@ const editMode=ref(false);
 // 게시글의 상세 정보를 저장할 반응형 변수
 const postDetails = ref({});
 
-const getPost = () => {
+const getPost = () => { 
     getPostDetails(
         route.params.id,
         ({ data }) => {
@@ -49,7 +49,7 @@ getPost();
             </div>   
         </div>
         <div class="guildPost-writer-container">
-            <div v-if="postDetails.createdBy">
+            <div v-if="postDetails.createBy">
                   <v-btn
                     variant="elevated"
                     rounded="lg"

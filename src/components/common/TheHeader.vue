@@ -34,6 +34,7 @@ const moveGuild = () => {
                 <NavListItem @click="moveGuild">길드</NavListItem>
             </TopNavList>
             <LoginForm></LoginForm>
+            
         </nav>
     </header>
 </template>
