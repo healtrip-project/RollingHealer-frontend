@@ -5,12 +5,14 @@ import {
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useLoginInfoStore } from "@/stores/loginInfo";
-import {findById} from "@/api/v1/user"
+import {findById, userUploadthumbnail} from "@/api/v1/user"
+import { contentImageParser } from "@/utils/image";
+import ImageForm from "../common/image/ImageForm.vue";
 
 // 여러 개의 기본 이미지 URL들을 배열로 정의
 const defaultImageUrl =
   "https://cdn.pixabay.com/photo/2022/11/14/10/37/chinese-lanterns-7591296_640.jpg";
-
+const showUploadModal=ref(false)
 const route = useRoute();
 const router = useRouter();
 const LoginInfoStore = useLoginInfoStore();
@@ -33,7 +35,18 @@ const getUserDetail = () => {
   )
 }
 getUserDetail();
-
+const handleUserImage=()=>{
+  showUploadModal.value=true;
+}
+const handleThumbnailUpload=(image)=>{
+  userUploadthumbnail(
+    image[0].fileImage
+    ,({data})=>{
+    userDetails.value.guildThumbnailFileUrl=image[0].fileImage;
+  },(error)=>{
+    console.log(error)
+  })
+}
 </script>
 
 <template>
@@ -47,10 +60,12 @@ getUserDetail();
         >
         <v-img
           class="align-front text-white"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+          :src="contentImageParser(userDetails)||'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
           width="200px"
           cover
+          @click="handleUserImage"
         >
+        <ImageForm  v-model:showUpload="showUploadModal" single-upload @success-upload="handleThumbnailUpload"></ImageForm>
           <v-card-title>{{ userDetails.userId }}</v-card-title>
         </v-img>
         <v-card-title> {{ userDetails.userNickname }}</v-card-title>

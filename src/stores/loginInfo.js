@@ -27,6 +27,7 @@ export const useLoginInfoStore = defineStore('loginInfo', () => {
              isLogin.value = true;
              isLoginError.value = false;
              isValidToken.value = true;
+             getUserInfo();
            } else {
              console.log("로그인 실패했다");
              isLogin.value = false;

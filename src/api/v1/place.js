@@ -5,7 +5,6 @@ const local = localAxios();
 
 
 async function getPlaceData(query, success, fail) {
-  console.log("실행")
   console.log(query)
   await local.get("/place/search",{params:query}).then(success).catch(fail);
 }
