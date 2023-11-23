@@ -22,6 +22,12 @@ await local.get(`/post/guild/${guildId}`).then(success).catch(fail);
 //   }
 
 
+async function postDelete( postId, success, fail) {
+  const ulis = useLoginInfoStore();
+  local.defaults.headers["Authorization"] = ulis.accessToken;
+  await local.put(`/post/${postId}/delete` ).then(success).catch(fail);
+}
+
 async function writePost(post, success, fail) {
   await local.post(`/post`, post).then(success).catch(fail);
 }
@@ -32,4 +38,9 @@ async function getPostDetails(postId, success, fail) {
 
 
 
-export { getPost, writePost, getPostDetails , getPostByGuildId };
+export { getPost, writePost, 
+  getPostDetails , 
+  getPostByGuildId,
+  postDelete
+
+};

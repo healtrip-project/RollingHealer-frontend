@@ -104,7 +104,7 @@ getGuildList();
   margin-bottom: 1rem; /* Add space between items */
 }
 
-.post-item:hover {
+.guild-item:hover {
   transform: translateY(-5px);
 }
 

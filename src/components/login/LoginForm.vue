@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, watch } from "vue";
+import TheLogo from "@/components/common/TheLogo.vue"
 import { useLoginInfoStore } from "@/stores/loginInfo";
-import { tokenRegeneration } from "@/api/v1/user";
+import { tokenRegeneration, userJoin } from "@/api/v1/user";
 import NavButton from "@/components/common/NavButton.vue";
+import { routerKey, useRouter } from "vue-router";
 
 const isShowLoginDialog = ref(false);
 const userId = ref("");
@@ -10,6 +12,42 @@ const password = ref("");
 const loginStore = useLoginInfoStore();
 const userInfo = computed(() => loginStore.userInfo);
 const isLogin = computed(() => loginStore.isLogin);
+const router = useRouter();
+
+const join = ref({
+  userId: "",
+  userPassword: "",
+  userName: "",
+  userNickname: "",
+  userEmailId: "",
+  userEmailDomain: "",
+});
+
+const joinAction = () => {
+  if (
+    !join.value.userId ||
+    !join.value.userPassword ||
+    !join.value.userName ||
+    !join.value.userNickname ||
+    !join.value.userEmailId ||
+    !join.value.userEmailDomain
+  ) {
+    alert("양식을 전부 작성해주세요.");
+    return;
+  }
+  console.dir(join);
+  userJoin(
+    join.value,
+    ({ data }) => {
+      console.log(data);
+      alert("회원가입 완료!!");
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
 const login = () => {
   loginStore.userLogin({
     userId: userId.value,
@@ -32,6 +70,15 @@ const rules = {
 };
 
 const reveal = ref(false);
+
+
+
+const goMemberPage = (userId) => {
+  router.push({name: "UserDetail", params:{userid : userId}})
+}
+
+
+
 </script>
 
 <template>
@@ -40,15 +87,20 @@ const reveal = ref(false);
       <NavButton>로그인</NavButton>
       <v-dialog activator="parent" v-model="isShowLoginDialog">
         <div>
-          <v-img
-            class="mx-auto my-6"
-            max-width="228"
-            src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"
-          ></v-img>
-
           <!-- 로그인 입력 카드 -->
-          <v-card class="mx-auto px-6 py-8" max-width="390">
-            <v-form  @submit.prevent="login">
+          <v-card class="mx-auto px-6 py-8" max-width="390" color="#0e0e0e"
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <TheLogo
+              max-width="228"
+              type="default"
+             />
+            <v-spacer></v-spacer>
+             
+          </v-card-actions>
+              <br>
+            <v-form @submit.prevent="login">
               <v-text-field
                 v-model="userId"
                 :rules="[rules.required]"
@@ -66,18 +118,27 @@ const reveal = ref(false);
               ></v-text-field>
 
               <br />
-
-              <v-card class="mb-12" color="surface-variant" variant="tonal">
-                <v-card-text class="text-medium-emphasis text-caption">
-                  Warning: 회원가입부터해라 After 3 consecutive failed login
-                  attempts, you account will be temporarily locked for three
-                  hours. If you must login now, you can also click "Forgot login
-                  password?" below to reset the login password.
-                </v-card-text>
+              <v-card
+                class="mb-12"
+                color="#383838"
+                elevation="10"
+                variant="elevated"
+                text="
+                      Warning: 회원가입부터해라 After 3 consecutive failed login
+                      attempts, you account will be temporarily locked for three
+                      hours. If you must login now, you can also click Forgot login
+                      password? below to reset the login password."
+              >
+                <!-- <v-card-text class="text-medium-emphasis text-caption"
+                    >
+                      Warning: 회원가입부터해라 After 3 consecutive failed login
+                      attempts, you account will be temporarily locked for three
+                      hours. If you must login now, you can also click "Forgot login
+                      password?" below to reset the login password.
+                    </v-card-text> -->
               </v-card>
 
               <v-btn
-                
                 block
                 color="success"
                 size="large"
@@ -87,8 +148,7 @@ const reveal = ref(false);
                 WelCome Healer!!
               </v-btn>
             </v-form>
-            <v-card-text class="text-center">
-            </v-card-text>
+            <v-card-text class="text-center"> </v-card-text>
             <v-card-actions>
               <v-btn
                 variant="text"
@@ -99,9 +159,6 @@ const reveal = ref(false);
               </v-btn>
             </v-card-actions>
 
-
-
-
             <!-- 회원가입 입력 카드 -->
             <v-expand-transition>
               <v-card
@@ -109,57 +166,63 @@ const reveal = ref(false);
                 class="v-card--reveal"
                 style="height: 100%"
                 max-width="344"
-                title="User Registration"
+                title="힐러 명단 등록"
+                color="#0e0e0e"
               >
                 <v-container>
                   <v-text-field
-                    v-model="first"
+                    v-model="join.userId"
                     color="primary"
-                    label="First name"
+                    label="Id"
                     variant="underlined"
                   ></v-text-field>
 
                   <v-text-field
-                    v-model="last"
+                    v-model="join.userPassword"
                     color="primary"
-                    label="Last name"
+                    type="password"
+                    label="Password"
+                    placeholder="Enter your password"
                     variant="underlined"
                   ></v-text-field>
 
                   <v-text-field
-                    v-model="email"
+                    v-model="join.userName"
+                    color="primary"
+                    label="Name"
+                    variant="underlined"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="join.userNickname"
+                    color="primary"
+                    label="Healer NickName"
+                    variant="underlined"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="join.userEmailId"
                     color="primary"
                     label="Email"
                     variant="underlined"
                   ></v-text-field>
 
                   <v-text-field
-                    v-model="password"
+                    v-model="join.userEmailDomain"
                     color="primary"
-                    label="Password"
-                    placeholder="Enter your password"
+                    label="EmailDomain"
                     variant="underlined"
                   ></v-text-field>
 
-                  <v-checkbox
-                    v-model="terms"
+                  <!-- <v-checkbox
                     color="secondary"
                     label="I agree to site terms and conditions"
-                  ></v-checkbox>
+                  ></v-checkbox> -->
                 </v-container>
 
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn color="success">
-                    Complete Registration
-
-                    <v-icon icon="mdi-chevron-right" end></v-icon>
-                  </v-btn>
-                </v-card-actions>
-                <v-card-actions class="pt-0">
                   <v-btn
                     variant="text"
                     color="teal-accent-4"
@@ -167,7 +230,13 @@ const reveal = ref(false);
                   >
                     Close
                   </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn color="success" @click="joinAction">
+                    Complete Registration
+                    <v-icon icon="mdi-chevron-right" end></v-icon>
+                  </v-btn>
                 </v-card-actions>
+                
               </v-card>
             </v-expand-transition>
           </v-card>
@@ -175,7 +244,7 @@ const reveal = ref(false);
       </v-dialog>
     </div>
     <div class="nav-list-item" v-else>
-      <span>마이페이지</span>
+      <span @click="goMemberPage(userInfo.userId)">마이페이지</span>
       <span class="ms-5" @click="logout">로그아웃</span>
     </div>
   </v-container>
@@ -283,8 +352,4 @@ const reveal = ref(false);
 } 
 
 */
-
-
-
-
 </style>

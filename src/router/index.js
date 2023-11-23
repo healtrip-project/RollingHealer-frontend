@@ -10,7 +10,7 @@ import GuildDetail from '@/components/guild/GuildDetail.vue'
 import GuildPostWrite from '@/components/guild/GuildPostWrite.vue'
 import GuildPostDetail from '@/components/guild/GuildPostDetail.vue'
 import PlaceList from '@/components/place/PlaceList.vue'
-
+import UserDetail from '@/components/user/UserDetail.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -124,6 +124,23 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/user",
+      name: "User",
+      component: () => import("../views/UserView.vue"),
+      redirect: { name: "UserDetail" },
+      children: [
+        {
+          path: "/user/:userid",
+          name: "UserDetail",
+          component: UserDetail,
+        },
+
+      ]
+
+    },
+
+
   ],
 });
 

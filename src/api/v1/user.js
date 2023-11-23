@@ -26,7 +26,6 @@ async function userUploadthumbnail(uploadthumbnailFileUrl, success, fail) {
 }
 
 async function userJoin(data, success, fail) {
-
   await local.post(`/auth/join`, {...data}).then(success).catch(fail);
 }
 
@@ -41,4 +40,6 @@ async function logout(userid, success, fail) {
 }
 
 
-export { userConfirm, findById, tokenRegeneration, logout, userUploadthumbnail };
+export { userConfirm, findById, tokenRegeneration, logout,
+  userJoin
+, userUploadthumbnail };
