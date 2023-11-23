@@ -2,6 +2,9 @@
 import TheFooter from "@/components/common/TheFooter.vue";
 import TheHeader from "@/components/common/TheHeader.vue";
 import MainContainer from "@/components/layout/MainContainer.vue";
+import { onDeactivated } from "vue";
+import { KeepAlive } from "vue";
+import { onActivated } from "vue";
 import { RouterView } from "vue-router";
 
 const tabItems = [{
@@ -21,7 +24,6 @@ const tabItems = [{
   tabLink:{name:"Plan"}
 }
 ]
-  
 </script>
 
 <template>
@@ -42,7 +44,13 @@ const tabItems = [{
       </v-tabs>
     </template>
     <template #main>
-      <RouterView></RouterView>
+      <RouterView v-slot="{Component}">
+        <KeepAlive :include="'MapPage'">
+          <component :is="Component">
+          </component>
+        </KeepAlive>
+        
+      </RouterView>
     </template>
     <template #footer>
       <TheFooter></TheFooter>

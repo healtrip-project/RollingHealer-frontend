@@ -11,6 +11,7 @@ import GuildPostWrite from '@/components/guild/GuildPostWrite.vue'
 import GuildPostDetail from '@/components/guild/GuildPostDetail.vue'
 import PlaceList from '@/components/place/PlaceList.vue'
 import UserDetail from '@/components/user/UserDetail.vue'
+import { useLoginInfoStore } from '@/stores/loginInfo'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -120,7 +121,7 @@ const router = createRouter({
         {
           path: "/plan/map",
           name: "MapMain",
-          component: ()=>import("../components/map/NMAP.vue")
+          component: ()=>import("../components/map/MapPage.vue")
         },
       ],
     },
@@ -140,7 +141,24 @@ const router = createRouter({
 
     },
 
-
+    {
+      path: "/admin",
+      name: "Admin",
+      component: () => import("../views/AdminView.vue"),
+      redirect: { name: "AdminDataFetch" },
+      children: [
+        {
+          path: "fetchData",
+          name: "AdminDataFetch",
+          component: () => import("../components/admin/AdminDataFetch.vue"),
+          // beforeEnter: (to, from) => {
+          //   const userStroe = useLoginInfoStore();
+          //   if (userStroe.userInfo.userId !== 'admin') return false;
+          // }
+        },
+      ],
+      
+    }
   ],
 });
 

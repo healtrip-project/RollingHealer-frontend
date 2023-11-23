@@ -11,7 +11,7 @@ const userId = ref("");
 const password = ref("");
 const loginStore = useLoginInfoStore();
 const userInfo = computed(() => loginStore.userInfo);
-const isLogin = loginStore.isLogin;
+const isLogin = computed(()=>loginStore.isLogin);
 const router = useRouter();
 
 const join = ref({
@@ -41,6 +41,9 @@ const joinAction = () => {
     ({ data }) => {
       console.log(data);
       alert("회원가입 완료!!");
+      reveal.value = false;
+      isShowLoginDialog.value = false;
+      loginStore.getUserInfo();
     },
     (error) => {
       console.log(error);
@@ -54,10 +57,11 @@ const login = () => {
     password: password.value,
   });
 
-  watch(isLogin, (newValue) => {
+  const one=watch(isLogin, (newValue) => {
     if (newValue) {
       loginStore.getUserInfo();
       isShowLoginDialog.value = false;
+      one();
     }
   });
 };

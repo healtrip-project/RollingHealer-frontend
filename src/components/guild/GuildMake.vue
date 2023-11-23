@@ -18,12 +18,14 @@ const createdBy = ref('')
 const guildManager = ref('')
 const profileImg = ref("");
 
+const { VITE_API_BASE_URL } = import.meta.env;
 const isAvailableAlias = ref(false);
 
 onMounted(() => {
     if (userStore.userInfo.userId) {
         createdBy.value = userStore.userInfo.userId;
-        guildManager.value = userStore.userInfo.userId;
+      guildManager.value = userStore.userInfo.userId;
+      profileImg.value = VITE_API_BASE_URL+userStore.userInfo.userThumbnailFileUrl;
     } 
 });
 

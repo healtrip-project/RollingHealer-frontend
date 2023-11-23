@@ -5,6 +5,7 @@ import { guildPostWrite } from "@/api/v1/guild";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted } from "vue";
 import TheTiptapEditor from "../common/editor/TheTiptapEditor.vue";
+import { computed } from "vue";
 const route = useRoute();
 const router = useRouter();
 
@@ -15,12 +16,12 @@ const createdBy = ref("");
 const profileImg = ref("");
 
 const userStore = useLoginInfoStore();
-console.dir(userStore.userInfo);
-
+const userInfo=computed(()=>userStore.userInfo)
+const { VITE_API_BASE_URL } = import.meta.env;
 onMounted(() => {
   if (userStore.userInfo.userId) {
     createdBy.value = userStore.userInfo.userId;
-    // profileImg.value = userStore.userInfo.userThumbnailFileUrl;
+    profileImg.value = VITE_API_BASE_URL+userInfo.value.userThumbnailFileUrl;
   }
 });
 const rules = {

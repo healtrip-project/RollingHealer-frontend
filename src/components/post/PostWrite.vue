@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useLoginInfoStore } from "@/stores/loginInfo";
 import {writePost} from "@/api/v1/post"
 import { useRouter } from "vue-router";
@@ -15,12 +15,15 @@ const createBy = ref("");
 const profileImg = ref("");
 
 const userStore = useLoginInfoStore();
+const userInfo=computed(()=>userStore.userInfo)
+const { VITE_API_BASE_URL } = import.meta.env;
 console.dir(userStore.userInfo);
 
 onMounted(() => {
     if (userStore.userInfo.userId) {
         createBy.value = userStore.userInfo.userId;
-        // profileImg.value = userStore.userInfo.userThumbnailFileUrl;
+      // profileImg.value = userStore.userInfo.userThumbnailFileUrl;
+      profileImg.value = VITE_API_BASE_URL+userInfo.value.userThumbnailFileUrl;
     } 
 });
 
