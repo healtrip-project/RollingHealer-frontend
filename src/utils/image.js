@@ -44,7 +44,7 @@ function contentImageParser(item,index) {
     (item?.guildThumbnailFileUrl ? VITE_API_BASE_URL+item.guildThumbnailFileUrl : null) ||
     item.firstimage ||
     item.firstimage2 ||
-    firstImageParingTest(item?.content && JSON.parse(item.content)) ||
+    (item?.content?firstImageParingTest(item?.content && JSON.parse(item.content)):item?.raw?.content?firstImageParingTest(item?.raw?.content && JSON.parse(item?.raw?.content)):false) ||
     defaultImageUrls[(index || randomNum) % defaultImageUrls.length]
   );
 }

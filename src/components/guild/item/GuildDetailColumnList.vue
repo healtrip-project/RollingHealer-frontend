@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router"; 
+import { contentImageParser } from "@/utils/image"
+
 const props = defineProps({
   items: {
     type: Array,
@@ -60,7 +62,7 @@ const goPostDetail = (postId) => {
               md="4"
             >
               <v-card class="pb-3" elevation="5" flat color="#000000">
-                <v-img :src="item.raw.img ? item.raw.img : 'https://cdn.pixabay.com/photo/2022/11/14/10/37/chinese-lanterns-7591296_640.jpg'"></v-img>
+                <v-img :src=" contentImageParser(item)  ||item.raw.img|| 'https://cdn.pixabay.com/photo/2022/11/14/10/37/chinese-lanterns-7591296_640.jpg'"></v-img>
 
                 <v-list-item class="mb-2" :subtitle="item.raw.createBy ">
                   <template v-slot:title>
