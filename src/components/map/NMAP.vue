@@ -1,4 +1,6 @@
+<!-- eslint-disable no-loss-of-precision -->
 <script setup>
+import { getPlaceData } from "@/api/v1/place";
 import { ref } from "vue";
 import { NaverMap,NaverMarker  } from "vue3-naver-maps";
 const map = ref();
@@ -9,6 +11,24 @@ const mapOptions = {
   zoomControl: true,
   zoomControlOptions: { position: "TOP_RIGHT" },
 };
+const props = defineProps({
+  markerData: {
+    type:Object
+  }
+})
+// const testData = ref([]);
+
+// getPlaceData({
+//   sidocode:1,
+
+// },({data})=>{
+//   testData.value = data;
+//   console.log(testData.value)
+// },(error)=>{
+//   console.log(error)
+// })
+const emits=defineEmits(['update:markerData'])
+console.log()
 const initLayers = [
   "BACKGROUND",
   "BACKGROUND_DETAIL",
@@ -16,9 +36,11 @@ const initLayers = [
   "TRANSIT",
   "ENGLISH",
 ];
-const marker = ref();
-const onLoadMarker = (markerObject) => {
-  marker.value = markerObject;
+const onHandleClick = (marker) => {
+  console.log(marker)
+  map.value.setCenter(marker.coord)
+  map.value.setZoom(15)
+
 };
 const onLoadMap = (mapObject) => {
   map.value = mapObject;
@@ -34,9 +56,13 @@ const onLoadMap = (mapObject) => {
     @onLoad="onLoadMap($event)"
   >
     <naver-marker
-        latitude="37.51347"
-        longitude="127.041722"
-        @onLoad="onLoadMarker($event)">
+    v-for="(marker, index) in markerData"
+    :key="index"
+        :latitude="marker['mapy']"
+        :longitude="marker['mapx']"
+        @click="onHandleClick"
+        >
+
     </naver-marker>
   </naver-map>
 </template>
