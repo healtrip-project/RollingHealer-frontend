@@ -16,7 +16,6 @@ import {contentImageParser} from "@/utils/image"
 import { getPostByGuildId } from "@/api/v1/post";
 import ImageForm from "../common/image/ImageForm.vue";
 
-
 const route = useRoute();
 const router = useRouter();
 
@@ -24,7 +23,8 @@ const LoginInfoStore = useLoginInfoStore();
 const showUploadModal=ref(false);
 const userInfo = computed(() => LoginInfoStore.userInfo);
 const guildDetails = ref({});
-// console.dir(userInfo.value);
+const isMyGuildCheck = ref(false);
+console.dir(userInfo.value);
 // console.dir(guildDetails);
 
 const getGuild = () => {
@@ -33,6 +33,7 @@ const getGuild = () => {
     ({ data }) => {
       // console.dir(data);
       guildDetails.value = data;
+      
     },
     (error) => {
       console.log(error);
@@ -40,6 +41,7 @@ const getGuild = () => {
   );
 };
 getGuild();
+
 const { VITE_API_BASE_URL } = import.meta.env;
 const guildColumns = ref([]);
 const getGuildPost = () => {
@@ -78,14 +80,16 @@ const goGuildPostWrite = () => {
 // 길드 가입
 const guildJoin = () => {
   if (!userInfo.value.guildId) {
-    alert("길드 가입 완료");
+    // console.log(route.params.id)
+    // console.log(userInfo.value.userId)
     joinGuild(
       route.params.id,
       userInfo.value.userId,
       ({ data }) => {
         // console.log(data);
-        getGuild();
-        LoginInfoStore();
+        // getGuild();
+        // LoginInfoStore();
+        alert("길드 가입 완료");
       },
       (error) => {
         console.log(error);
@@ -162,9 +166,9 @@ const handleThumbnailUpload= (image)=>{
           @click="handleGuildImage"
         >
         <ImageForm  v-model:showUpload="showUploadModal" single-upload @success-upload="handleThumbnailUpload"></ImageForm>
-          <v-card-title>{{ guildDetails.guildName }}</v-card-title>
-        </v-img>
-
+      </v-img>
+      
+      <v-card-title>{{ guildDetails.guildName }}</v-card-title>
         <v-card-subtitle class="pt-4"> #{{ guildDetails.goal }} </v-card-subtitle>
 
         <v-card-text>
@@ -173,13 +177,17 @@ const handleThumbnailUpload= (image)=>{
         </v-card-text>
 
         <v-card-actions>
-          <v-btn 
+          <!-- <v-btn 
           variant="outlined"
-          color="orange"> 수정 </v-btn>
+          color="orange"> 수정 
+        </v-btn> -->
 
           <v-btn 
+          
           variant="outlined"
-          color="orange"> 가입 </v-btn>
+          color="orange"
+          @click="guildJoin"
+          > 가입 </v-btn>
         </v-card-actions>
         <!-- <v-list lines="two" class="guild-user-list">
           <v-list-subheader class="guild-user-list-header"
@@ -254,20 +262,23 @@ const handleThumbnailUpload= (image)=>{
     <div class="main-content">
       <!-- 길드 칼럼 & 플랜 -->
       <div class="guild-action-list">
-        <div class="controls">
+        <v-card-actions>          
           <div class="vue-name">길드 맴버 칼럼</div>
-        </div>
+        </v-card-actions>
+        
         <GuildDetailColumnList :items="guildColumns"> </GuildDetailColumnList>
         
       </div>
 
       <!-- 길드 자유게시판 -->
       <div class="guild-post-list">
-        <div class="controls">
+
+        <v-card-actions>
           <div class="vue-name">길드 자유 게시판</div>
           <v-btn variant="tonal" @click="goGuildPostWrite"> 게시글 작성 </v-btn>
-        </div>
-        
+
+          
+        </v-card-actions>
         <PostList :items="guildPostlist"> </PostList>
 
 

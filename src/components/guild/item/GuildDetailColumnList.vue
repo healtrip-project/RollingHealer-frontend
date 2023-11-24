@@ -20,7 +20,7 @@ const goPostDetail = (postId) => {
 }
 
 //  코드 에러가 발생하고 있으나 왜 발생하는지 이유를 모른다
-
+    
 </script>
 
 <template>
@@ -78,9 +78,8 @@ const goPostDetail = (postId) => {
                     variant="tonal"
                     size="small"
                     class="text-none"
-                    text="Read"
                     @click="goPostDetail(item.raw.postId)"
-                  >
+                  >Read
                   </v-btn>
                 </div>
               </v-card>

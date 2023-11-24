@@ -130,7 +130,12 @@ const goMemberPage = (userId) => {
                 color="#383838"
                 elevation="10"
                 variant="elevated"
-                text="Warning: 회원가입부터해라"
+                text="
+                롤링힐러는
+                현대사회에서 여러 힐링이 필요한 사회원들을 위해 여행을 좋아하는 
+                역동적인 힐러들이 여행정보와 계획을 제공하고 이를 통해 치유( heal )로 이어지고자
+                 합니다
+                  "
               >
                 <!-- <v-card-text class="text-medium-emphasis text-caption"
                     >
