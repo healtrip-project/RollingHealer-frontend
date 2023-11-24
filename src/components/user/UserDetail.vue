@@ -19,14 +19,13 @@ const router = useRouter();
 const LoginInfoStore = useLoginInfoStore();
 const userInfo = computed(() => LoginInfoStore.userInfo);
 
-const userDetails = ref({});
 const userGuild = ref('');
 
 const getUserDetail = () => {
   findById(
   route.params.userid,
   ({data}) => {
-    userDetails.value = data
+    userInfo.value = data
     console.log(data)
   },
   (error) => {
@@ -43,7 +42,9 @@ const handleThumbnailUpload=(image)=>{
   userUploadthumbnail(
     image[0].fileImage
     ,({data})=>{
-    userDetails.value.guildThumbnailFileUrl=image[0].fileImage;
+    userInfo.value.userThumbnailFileUrl=image[0].fileImage;
+    LoginInfoStore.setUserThumbnailFileUrl(image[0].fileImage);
+    
   },(error)=>{
     console.log(error)
   })
@@ -76,20 +77,20 @@ onMounted(()=>{
         >
         <v-img
           class="align-front text-white"
-          :src="contentImageParser(userDetails)||'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
+          :src="contentImageParser(userInfo)||'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
           width="200px"
           cover
           @click="handleUserImage"
         >
         <ImageForm  v-model:showUpload="showUploadModal" single-upload @success-upload="handleThumbnailUpload"></ImageForm>
-          <v-card-title>{{ userDetails.userId }}</v-card-title>
+          <v-card-title>{{ userInfo.userId }}</v-card-title>
         </v-img>
-        <v-card-title> {{ userDetails.userNickname }}</v-card-title>
-        <v-card-subtitle class="pt-4" v-if="userDetails.guild_id ? userGuild = userDetails.guild_id : userGuild = '소속없음'"> #{{ userGuild }} </v-card-subtitle>
-        <v-card-subtitle class="pt-4"> #{{ userDetails.userNickname }} </v-card-subtitle>
+        <v-card-title> {{ userInfo.userNickname }}</v-card-title>
+        <v-card-subtitle class="pt-4" v-if="userInfo.guild_id ? userGuild = userInfo.guild_id : userGuild = '소속없음'"> #{{ userGuild }} </v-card-subtitle>
+        <v-card-subtitle class="pt-4"> #{{ userInfo.userNickname }} </v-card-subtitle>
 
         <v-card-text>
-          <div>{{ userDetails.description }}</div>
+          <div>{{ userInfo.description }}</div>
 
         </v-card-text>
 
@@ -139,7 +140,7 @@ onMounted(()=>{
       <!-- 맴버 칼럼 & 플랜 -->
       <div class="post-list">
         <TheListContentListTop>
-          {{ userDetails.userNickname }}의 칼럼
+          {{ userInfo.userNickname }}의 칼럼
           <template #right-side>
 
             <!--<v-btn variant="tonal" @click="goGuildPostWrite"> 더보기 </v-btn>-->

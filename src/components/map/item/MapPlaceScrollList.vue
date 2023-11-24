@@ -7,9 +7,10 @@ const props = defineProps({
   },
   }
 )
+const itemData=computed(()=>props.itemList)
 const emits = defineEmits(['onLoad','placeClick'])
-const load = () => {
-  emits('onLoad');
+const load = (status) => {
+  emits('onLoad',status);
   console.log(props)
 }
 const placeClick = (e) => {
@@ -21,8 +22,8 @@ const placeClick = (e) => {
 </script>
 
 <template>
-    <v-infinite-scroll :height="350" :items="itemList"  @Load="load" >
-      <template v-for="(item,index) in itemList" :key="index">
+    <v-infinite-scroll v-show="itemData.length>1" :height="400"  :items="itemData"  @Load="load" >
+      <template v-for="(item,index) in itemData" :key="index">
         <div :class="['pa-2','list-item-box', index % 2 === 0 ? 'bg-grey-lighten-3' : '']">
           <v-card
         :class="[ 'item-card']" 

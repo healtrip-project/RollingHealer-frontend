@@ -2,7 +2,7 @@
 import { Editor } from "@tiptap/vue-3";
 import { computed,ref } from "vue";
 import { useRouter } from "vue-router";
-import { firstImageParingTest,contentImageParser } from "@/utils/image";
+import { firstImageParingTest,contentImageParser,asyncContentImageParser } from "@/utils/image";
 const emits=defineEmits(['clickItem'])
 const props=defineProps({
     itemList:{
@@ -20,6 +20,10 @@ const props=defineProps({
     color:'var(--rhp-c-background-3)',
 
   })
+  // const testContentImageParser=computed(async (item)=>{
+  //   const result = await asyncContentImageParser(item);
+  //       return result;
+  // });
 
 </script>
 
@@ -44,7 +48,7 @@ const props=defineProps({
         :key="index"
         >
         <v-card
-        :class="['d-flex justify-center','text-center','ma-4','heart-box','rounded-lg','grey-darken-4']"
+        :class="['d-flex justify-center','text-center','ma-4','heart-box','rounded-lg','grey-darken-4','item-card-box']"
         :style="{backgroundColor:'black'}"
         width="130"
         height="130"
@@ -97,15 +101,18 @@ const props=defineProps({
 
 }
 .low-text{
-  font-weight: bold;
-  font-size: 0.9rem;
+  position: absolute;
   word-break: keep-all;
   color:whitesmoke;
   justify-content: flex-end;
   align-self: flex-end;
-
+  bottom:0;
+  right:0;
   padding-bottom: 1rem;
   padding-right: 1rem;
+}
+.item-card-box{
+  position: relative;
 }
 
 </style>

@@ -48,5 +48,18 @@ function contentImageParser(item,index) {
     defaultImageUrls[(index || randomNum) % defaultImageUrls.length]
   );
 }
+async function asyncContentImageParser(item) {
 
-export { firstImageParingTest, testImageParser, contentImageParser };
+   return (
+       (item?.userThumbnailFileUrl ? VITE_API_BASE_URL + item.userThumbnailFileUrl : null) ||
+       (item?.guildThumbnailFileUrl ? VITE_API_BASE_URL + item.guildThumbnailFileUrl : null) ||
+       item.firstimage ||
+       item.firstimage2 ||
+       firstImageParingTest(item?.content && JSON.parse(item.content)) ||
+       defaultImageUrls[(randomNum) % defaultImageUrls.length]
+     );
+
+}
+
+
+export { firstImageParingTest, testImageParser, contentImageParser, asyncContentImageParser };

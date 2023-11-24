@@ -1,8 +1,9 @@
 <script setup>
+import { contentImageParser } from "@/utils/image";
 import { ref } from "vue";
 
   const onboarding=ref(false)
-  const itemList =ref([{title:"배너1"},{title:"배너2"}])
+  const itemList =ref([{title:"오늘 날씨가 좋네요 ㅎㅎ", createBy:"ssafy",},{title:"어제,,, 등산해봤습니다",createBy:"kimsang"}])
 </script>
 
 <template>
@@ -19,13 +20,15 @@ import { ref } from "vue";
       <v-card
         elevation="2"
         height="200"
-        class="d-flex  align-center justify-center "
+        class="d-flex  align-center justify-center banner-card"
+        :image="contentImageParser(item)"
       >
         <h1
-          class="text-h2"
+          class="text-h4 banner-title ps-3 pa-3"
         >
           {{ item.title}}
         </h1>
+        <v-card-item class="text-h5 banner-createBy">{{ item?.createBy }}</v-card-item>
       </v-card>
     </v-window-item>
   </v-window>
@@ -35,5 +38,20 @@ import { ref } from "vue";
 .main-window-banner{
   color:black;
   min-width:650px;
+}
+.banner-card{
+  position: relative;
+}
+.banner-title{
+  position: absolute;
+  left:1rem;
+  top:1rem;
+  color: var(--rhp-c-text-1);
+}
+.banner-createBy{
+  position:absolute;
+  right:1rem;
+  bottom:1rem;
+  color: var(--rhp-c-text-1);
 }
 </style>

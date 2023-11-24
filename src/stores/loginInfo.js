@@ -45,7 +45,7 @@ export const useLoginInfoStore = defineStore(
 
     const getUserInfo = () => {
       let decodeToken = jwtDecode(token.value);
-      console.log("2. decodeToken", decodeToken);
+      console.log("2. decodeToken");
       findById(
         decodeToken.user_id,
         (response) => {
@@ -86,6 +86,7 @@ export const useLoginInfoStore = defineStore(
                   isLogin.value = false;
                   userInfo.value = null;
                   isValidToken.value = false;
+                  localStorage.removeItem("userInfo");
                 } else {
                   console.log("리프레시 토큰 제거 실패");
                 }
@@ -111,6 +112,7 @@ export const useLoginInfoStore = defineStore(
             isLogin.value = false;
             userInfo.value = null;
             isValidToken.value = false;
+            localStorage.removeItem('userInfo')
           } else {
             console.error("유저 정보 없음!!!!");
           }
@@ -126,6 +128,9 @@ export const useLoginInfoStore = defineStore(
     const setAccessToken = (newAccessToken) => {
       accessToken.value = newAccessToken;
     };
+    const setUserThumbnailFileUrl=(imageUrl)=>{
+      userInfo.value.userThumbnailFileUrl = imageUrl;
+    }
 
     return {
       isLogin,
@@ -139,11 +144,12 @@ export const useLoginInfoStore = defineStore(
       userLogout,
       setLoginStatus,
       setAccessToken,
+      setUserThumbnailFileUrl,
     };
   },
   {
     persist: {
-      paths: ["userInfo","isLogin"],
+      paths: ["userInfo", "isLogin", "userInfo.userThumbnailFileUrl"],
       storage: localStorage,
     },
   }

@@ -47,7 +47,7 @@ const router = createRouter({
         {
           path: "/post/detail/:id",
           name: "PostDetail",
-          component: PostDetail,
+          component: ()=>import('../components/post/PostDetail.vue'),
         },
       ],
     },
@@ -70,17 +70,17 @@ const router = createRouter({
         {
           path: "/guild/detail/:alias/:id",
           name: "GuildDetail",
-          component: GuildDetail,
+          component: ()=>import('../components/guild/GuildDetail.vue'),
         },
         {
           path: "/guild/guildpost/:alias/:id",
           name: "GuildPostWrite",
-          component: GuildPostWrite,
+          component: ()=>import('../components/guild/GuildPostWrite.vue'),
         },
         {
           path: "/guild/guildpost/:alias/:id/:postId",
           name: "GuildPostDetail",
-          component: GuildPostDetail,
+          component: ()=>import('../components/guild/GuildPostDetail.vue'),
         },
       ],
     },

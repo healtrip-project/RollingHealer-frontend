@@ -38,12 +38,15 @@ const joinAction = () => {
   console.dir(join);
   userJoin(
     join.value,
-    ({ data }) => {
-      console.log(data);
+    (response ) => {
+      console.log(response.data);
       alert("회원가입 완료!!");
       reveal.value = false;
       isShowLoginDialog.value = false;
+      loginStore.setAccessToken(response.headers["authorization"])
       loginStore.getUserInfo();
+      loginStore.setLoginStatus(true);
+      
     },
     (error) => {
       console.log(error);
@@ -127,11 +130,7 @@ const goMemberPage = (userId) => {
                 color="#383838"
                 elevation="10"
                 variant="elevated"
-                text="
-                      Warning: 회원가입부터해라 After 3 consecutive failed login
-                      attempts, you account will be temporarily locked for three
-                      hours. If you must login now, you can also click Forgot login
-                      password? below to reset the login password."
+                text="Warning: 회원가입부터해라"
               >
                 <!-- <v-card-text class="text-medium-emphasis text-caption"
                     >

@@ -20,11 +20,13 @@ const handleSearch = (query) => {
   })
 }
 
-const loadPlaceData = () => {
+const loadPlaceData = ({done}) => {
+  console.log("호출")
   saveQuery.value['page'] += 1
   getPlaceData(saveQuery.value,({data}) => {
     searchData.value.push(...data);
     console.log("success load data")
+    done('ok')
   }, (error) => {
     console.log(error)
   })

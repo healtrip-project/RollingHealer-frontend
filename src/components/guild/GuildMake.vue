@@ -4,6 +4,7 @@ import { useLoginInfoStore } from "@/stores/loginInfo";
 import { makeGuild, checkAliasAvailability } from "@/api/v1/guild"
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
+import { contentImageParser } from "@/utils/image";
 
 const router = useRouter();
 const userStore = useLoginInfoStore();
@@ -25,7 +26,7 @@ onMounted(() => {
     if (userStore.userInfo.userId) {
         createdBy.value = userStore.userInfo.userId;
       guildManager.value = userStore.userInfo.userId;
-      profileImg.value = VITE_API_BASE_URL+userStore.userInfo.userThumbnailFileUrl;
+      profileImg.value = contentImageParser(userStore.userInfo);
     } 
 });
 

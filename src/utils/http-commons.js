@@ -61,6 +61,8 @@ function localAxios() {
             const store=useLoginInfoStore();
             store.setAccessToken(newAccessToken);
             store.setLoginStatus(true);
+            const {getUserInfo} =store
+            getUserInfo();
             isTokenRefreshing = false;
 
             // 에러가 발생했던 원래의 요청을 다시 진행.
